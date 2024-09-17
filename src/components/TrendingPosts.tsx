@@ -21,7 +21,7 @@ const demoTrendingPosts = [
   },
   {
     id: 3,
-    content: '새로운 영화 '우주의 끝'이 박스오피스 1위를 차지했습니다. #영화 #엔터테인먼트',
+    content: '새로운 영화 "우주의 끝"이 박스오피스 1위를 차지했습니다. #영화 #엔터테인먼트',
     author: { name: '영화 평론가', username: 'movie_critic' },
     timestamp: '7시간 전',
     likes: 1500,
