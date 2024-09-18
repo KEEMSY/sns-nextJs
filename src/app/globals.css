@@ -38,3 +38,23 @@ body {
     @apply w-full border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent bg-gray-800 text-white;
   }
 }
+
+button:focus {
+  outline: none;
+}
+
+
+/* 웹킷 기반 브라우저(Chrome, Safari 등)에서 스크롤바 숨기기 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox에서 스크롤바 숨기기 */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* IE와 Edge에서 스크롤바 숨기기 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+}
