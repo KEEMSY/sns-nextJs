@@ -3,21 +3,27 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt } from 'react-icons/fa'
+import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUserPlus } from 'react-icons/fa'
 import ComposeModal from './ComposeModal'
+import SignUpModal from './SignUpModal'
 
 export default function Sidebar() {
   const { data: session } = useSession()
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false)
   const composeButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleComposeClick = () => {
     setIsComposeModalOpen(true)
   }
 
+  const handleSignUpClick = () => {
+    setIsSignUpModalOpen(true)
+  }
+
   const handleCloseModal = () => {
     setIsComposeModalOpen(false)
-    // 모달이 닫힐 때 버튼에서 포커스를 제거합니다.
+    setIsSignUpModalOpen(false)
     if (composeButtonRef.current) {
       composeButtonRef.current.blur()
     }
@@ -40,17 +46,28 @@ export default function Sidebar() {
             <FaFeatherAlt className="text-2xl" />
           </button>
         </nav>
-        {session && (
+        {session ? (
           <button 
             onClick={() => signOut()} 
             className="text-gray-400 hover:text-white transition duration-200"
           >
             로그아웃
           </button>
+        ) : (
+          <button
+            onClick={handleSignUpClick}
+            className="flex items-center justify-center w-12 h-12 rounded-full transition duration-200 hover:bg-gray-800 hover:text-blue-400 focus:outline-none"
+          >
+            <FaUserPlus className="text-2xl" />
+          </button>
         )}
       </aside>
       <ComposeModal
-       isOpen={isComposeModalOpen}
+        isOpen={isComposeModalOpen}
+        onClose={handleCloseModal}
+      />
+      <SignUpModal
+        isOpen={isSignUpModalOpen}
         onClose={handleCloseModal}
       />
     </>
