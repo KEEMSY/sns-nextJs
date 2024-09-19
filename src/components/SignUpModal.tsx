@@ -91,7 +91,6 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
               </button>
             </div>
             <div className="mt-6">
-              <p className="text-center text-gray-400 mb-4">간편 로그인</p>
               <div className="flex justify-center space-x-4">
                 <button className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-200">
                   <FaGoogle />
