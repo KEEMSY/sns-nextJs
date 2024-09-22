@@ -5,6 +5,7 @@ import { FaInstagram, FaCamera, FaPen, FaUserPlus } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
 import Layout from './Layout'
+import ComposeModal from './ComposeModal'
 
 interface ProfileDetailProps {
   username: string
@@ -12,6 +13,7 @@ interface ProfileDetailProps {
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
   const [activeTab, setActiveTab] = useState('threads')
+  const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
   
   // 이 부분은 실제 데이터로 대체해야 합니다
   const user = {
@@ -20,6 +22,19 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
     bio: '🇰🇷',
     followers: 7777,
     following: 777,
+  }
+
+  const renderContent = () => {
+    switch(activeTab) {
+      case 'threads':
+        return <div>스레드 내용</div>
+      case 'replies':
+        return <div>답글 내용</div>
+      case 'reposts':
+        return <div>리포스트 내용</div>
+      default:
+        return null
+    }
   }
 
   return (
@@ -71,35 +86,71 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
       </div>
 
       <div className="p-4">
-        <div className="flex items-center space-x-2 mb-4">
-          <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-            <IoMdPerson size={20} />
+        {renderContent()}
+      </div>
+
+      {activeTab === 'threads' && (
+        <>
+          <div className="p-4 border-t border-b border-gray-700">
+            <div 
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => setIsComposeModalOpen(true)}
+            >
+              <div className="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                <IoMdPerson size={20} />
+              </div>
+              <p className="text-gray-500 flex-grow">스레드를 시작하세요...</p>
+              <button className="bg-gray-800 text-gray-400 px-4 py-1 rounded-full text-sm font-semibold">
+                게시
+              </button>
+            </div>
           </div>
-          <p className="text-gray-500">스레드를 시작해보세요...</p>
-          <button className="ml-auto text-blue-500">게시</button>
-        </div>
-        <div className="mb-6">
-          <h3 className="font-bold mb-2">프로필 완성하기</h3>
-          <p className="text-gray-500 text-sm mb-4">4개 남음</p>
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { icon: FaCamera, text: '프로필 사진 추가', action: '추가' },
-              { icon: FaPen, text: '소개 추가', action: '추가' },
-              { icon: FaUserPlus, text: '프로필 5개 팔로우', action: '프로필 보기' }
-            ].map((item, index) => (
-              <div key={index} className="bg-[#1a1a1a] p-4 rounded-lg flex flex-col items-center justify-center text-center">
-                <div className="mb-2">
-                  <item.icon size={24} />
+
+          <div className="p-4 bg-[#101010]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-bold text-lg">프로필 완성하기</h3>
+              <span className="text-gray-500 text-sm">4개 남음</span>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                  <FaCamera className="text-white" size={24} />
                 </div>
-                <p className="text-sm mb-2">{item.text}</p>
-                <button className="bg-white text-black text-sm font-bold py-1 px-3 rounded-full">
-                  {item.action}
+                <h4 className="font-semibold mb-1">프로필 사진 추가</h4>
+                <p className="text-gray-500 text-sm mb-3">사람들이 회원님을 알아볼 수 있게 설정해보세요.</p>
+                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                  추가
                 </button>
               </div>
-            ))}
+              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                  <FaPen className="text-white" size={24} />
+                </div>
+                <h4 className="font-semibold mb-1">소개 추가</h4>
+                <p className="text-gray-500 text-sm mb-3">회원님을 소개하고 사람들에게 회원님의 관심사를 알려주세요.</p>
+                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                  추가
+                </button>
+              </div>
+              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                  <FaUserPlus className="text-white" size={24} />
+                </div>
+                <h4 className="font-semibold mb-1">프로필 5개 팔로우</h4>
+                <p className="text-gray-500 text-sm mb-3">관심 있는 스레드로 피드를 채워 보세요.</p>
+                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                  프로필 보기
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
+
+      <ComposeModal
+        isOpen={isComposeModalOpen}
+        onClose={() => setIsComposeModalOpen(false)}
+      />
     </Layout>
   )
 }
