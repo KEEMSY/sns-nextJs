@@ -1,12 +1,43 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Post from './Post'
 import { dummyPosts } from '../lib/dummyData'
 import { FaImage, FaGift, FaPoll, FaSmile } from 'react-icons/fa'
 
 export default function Feed() {
   const [newPost, setNewPost] = useState('')
+  const [posts, setPosts] = useState<typeof dummyPosts>([])
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const [page, setPage] = useState(1)
+
+  const observer = useRef<IntersectionObserver | null>(null)
+  const lastPostElementRef = useCallback((node: HTMLElement | null) => {
+    if (loading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore) {
+        loadMorePosts()
+      }
+    })
+    if (node) observer.current.observe(node)
+  }, [loading, hasMore])
+
+  useEffect(() => {
+    loadMorePosts()
+  }, [])
+
+  const loadMorePosts = () => {
+    setLoading(true)
+    setTimeout(() => {
+      const newPosts = dummyPosts.slice((page - 1) * 10, page * 10)
+      setPosts(prevPosts => [...prevPosts, ...newPosts])
+      setPage(prevPage => prevPage + 1)
+      setHasMore(newPosts.length > 0)
+      setLoading(false)
+    }, 1000) // 1초 지연을 주어 로딩 효과를 시뮬레이션합니다.
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,9 +74,12 @@ export default function Feed() {
         </form>
       </div>
       <div>
-        {dummyPosts.map(post => (
-          <Post key={post.id} post={post} />
+        {posts.map((post, index) => (
+          <div key={post.id} ref={index === posts.length - 1 ? lastPostElementRef : null}>
+            <Post post={post} />
+          </div>
         ))}
+        {loading && <div className="text-center p-4">Loading...</div>}
       </div>
     </div>
   )
