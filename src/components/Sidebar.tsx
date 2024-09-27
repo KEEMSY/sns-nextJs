@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
-import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUserPlus, FaBell, FaEnvelope, FaUsers } from 'react-icons/fa'
+import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUserPlus, FaUsers } from 'react-icons/fa'
 import ComposeModal from './ComposeModal'
 import SignUpModal from './SignUpModal'
 
