@@ -77,7 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, additionalContent, sho
         </AnimatePresence>
       </header>
       <main className="flex-1 relative">
-        <div className="absolute inset-x-0 top-0 bottom-0 bg-[#101010] rounded-t-[2rem] overflow-y-auto hide-scrollbar">
+        <div className="absolute inset-x-0 top-0 bottom-0 bg-[#101010] rounded-t-[2rem] overflow-y-auto hide-scrollbar pb-16">
           {children}
         </div>
       </main>
