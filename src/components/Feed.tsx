@@ -17,11 +17,11 @@ const dummyUsers = [
 ];
 
 const dummyClubs = [
-  { id: '1', name: 'BTS', color: 'bg-purple-500' },
-  { id: '2', name: 'BLACKPINK', color: 'bg-pink-500' },
-  { id: '3', name: 'EXO', color: 'bg-blue-500' },
-  { id: '4', name: 'TWICE', color: 'bg-yellow-500' },
-  { id: '5', name: 'NCT', color: 'bg-green-500' },
+  { id: '1', name: 'BTS', color: 'bg-purple-500', clubName: 'BTS' },
+  { id: '2', name: 'BLACKPINK', color: 'bg-pink-500', clubName: 'BLACKPINK' },
+  { id: '3', name: 'EXO', color: 'bg-blue-500', clubName: 'EXO' },
+  { id: '4', name: 'TWICE', color: 'bg-yellow-500', clubName: 'TWICE' },
+  { id: '5', name: 'NCT', color: 'bg-green-500', clubName: 'NCT' },
 ];
 
 // 더미 포스트 데이터 추가

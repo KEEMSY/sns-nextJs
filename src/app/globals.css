@@ -135,3 +135,17 @@ button:focus {
 .hide-scrollbar {
   -ms-overflow-style: none;
 }
+
+/* slick-carousel 기본 스타일 */
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';
+
+/* 스크롤바 숨기기 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
