@@ -52,8 +52,8 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
   };
 
   return (
-    <div className="bg-[#1e1e1e] rounded-xl p-4 my-4 shadow-lg">
-      
+    <div className="bg-[#1e1e1e] rounded-xl p-4 my-4 shadow-lg" style={{ margin: '10px 15px' }}>
+                   
       <div className="flex justify-center space-x-4 mb-4">
         <button
           className={`text-white font-semibold ${activeTab === 'users' ? 'border-b-2 border-blue-500' : ''}`}
@@ -72,10 +72,9 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'users' && (
         <Slider {...settings}>
           {users.map((user) => (
-            <div key={user.id} className="bg-gray-800 rounded-lg p-3 flex items-center transition-transform transform hover:scale-105 mx-2">
+            <div key={user.id} className={`bg-gray-800 rounded-lg p-3 flex items-center transition-colors duration-200 ${activeTab === 'users' ? 'hover:bg-gray-600' : ''} mx-2 mb-4`}>
               <div className={`w-12 h-12 ${user.color} rounded-full flex items-center justify-center text-xl font-bold text-white mr-3`}>
                 {user.name[0]}
-                
               </div>
               <div className="flex flex-col">
                 <p className="text-white text-sm font-semibold text-center truncate">{user.name}</p>
@@ -92,7 +91,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'clubs' && (
         <Slider {...settings}>
           {clubs.map((club) => (
-            <div key={club.id} className="bg-gray-800 rounded-lg p-3 flex items-center transition-transform transform hover:scale-105 mx-2">
+            <div key={club.id} className={`bg-gray-800 rounded-lg p-3 flex items-center transition-colors duration-200 ${activeTab === 'clubs' ? 'hover:bg-gray-600' : ''} mx-2 mb-4`}>
               <div className={`w-12 h-12 ${club.color} rounded-full flex items-center justify-center text-xl font-bold text-white mr-3`}>
                 {club.name[0]}
               </div>

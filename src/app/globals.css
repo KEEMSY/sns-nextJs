@@ -149,3 +149,7 @@ button:focus {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.slick-slide {
+  margin: 0 5px; /* 좌우 마진을 10px로 설정 */
+}
