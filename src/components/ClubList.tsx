@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import Club from './Club';
 
 interface ClubData {
@@ -21,9 +22,9 @@ const ClubList: React.FC = () => {
       <h2 className="text-xl font-bold p-4">클럽</h2>
       <div className="flex overflow-x-auto hide-scrollbar pb-4">
         {dummyClubs.map((club) => (
-          <div key={club.id} className="flex-shrink-0">
+          <Link key={club.id} href={`/club/${club.id}`} className="flex-shrink-0">
             <Club {...club} />
-          </div>
+          </Link>
         ))}
       </div>
     </div>

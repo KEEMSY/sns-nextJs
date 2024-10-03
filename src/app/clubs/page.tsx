@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Layout from '../../components/Layout';
 import Club from '../../components/Club';
 
@@ -47,11 +48,13 @@ export default function ClubsPage() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           {filteredClubs.map(club => (
-            <div key={club.id} className="bg-gray-800 p-4 rounded-md">
-              <Club id={club.id} name={club.name} color={club.color} />
-              <p className="text-sm text-gray-400 mt-2">멤버: {club.memberCount.toLocaleString()}</p>
-              <p className="text-sm text-gray-300 mt-1">{club.description}</p>
-            </div>
+            <Link key={club.id} href={`/clubs/${club.id}`} className="block"> 
+              <div className="bg-gray-800 p-4 rounded-md hover:bg-gray-700 transition duration-300">
+                <Club id={club.id} name={club.name} color={club.color} />
+                <p className="text-sm text-gray-400 mt-2">멤버: {club.memberCount.toLocaleString()}</p>
+                <p className="text-sm text-gray-300 mt-1">{club.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
