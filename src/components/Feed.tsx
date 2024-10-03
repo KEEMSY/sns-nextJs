@@ -1,5 +1,9 @@
 'use client'
 
+// 피드 클릭 시, 상세 페이지로 가지 않는 이슈 발생
+// 피드 내 추천 영역 내 프로필 및 클럽 클릭 시, 해당 상세 페이지로 갈 수 있도록 코드 수정 필요
+
+
 
 // 더미 포스트 데이터 추가
 import React, { useState, useEffect, useRef, useCallback } from 'react'
