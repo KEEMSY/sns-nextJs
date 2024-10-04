@@ -10,6 +10,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Post from './Post'
 import Recommendations from './Recommendations'
 import { FaImage, FaGift, FaPoll, FaSmile } from 'react-icons/fa'
+import Link from 'next/link';
 
 // 더미 데이터 추가
 const dummyUsers = [
@@ -130,7 +131,11 @@ export default function Feed() {
       <div>
         {posts.map((post, index) => (
           <React.Fragment key={post.id}>
-            <Post post={post} />
+            <Link href={`/post/${post.id.replace('post-', '')}`} passHref>
+              <div className="cursor-pointer">
+                <Post post={{...post, id: Number(post.id.replace('post-', '')), timestamp: post.createdAt, reposts: 0}} />
+              </div>
+            </Link>
             {recommendations[Math.floor(index / 30)] && (index + 1) % 30 === 0 && (
               <Recommendations {...recommendations[Math.floor(index / 30)]} />
             )}

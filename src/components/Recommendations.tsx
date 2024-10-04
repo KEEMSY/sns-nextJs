@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Slider from 'react-slick';
+import Link from 'next/link';
 
 interface User {
   id: string;
@@ -72,18 +73,28 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'users' && (
         <Slider {...settings}>
           {users.map((user) => (
-            <div key={user.id} className={`bg-gray-800 rounded-lg p-3 flex items-center transition-colors duration-200 ${activeTab === 'users' ? 'hover:bg-gray-600' : ''} mx-2 mb-4`}>
-              <div className={`w-12 h-12 ${user.color} rounded-full flex items-center justify-center text-xl font-bold text-white mr-3`}>
-                {user.name[0]}
-              </div>
-              <div className="flex flex-col">
-                <p className="text-white text-sm font-semibold text-center truncate">{user.name}</p>
-                <p className="text-gray-400 text-xs text-center truncate">@{user.username}</p>
-                <button className="bg-blue-500 text-white text-xs font-bold py-1 px-2 rounded-full hover:bg-blue-600 transition duration-200 mt-1">
+            <Link key={user.id} href={`/profile/${user.username}`}>
+              <div className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+                <div className="flex items-center mb-3">
+                  <div className={`w-12 h-12 ${user.color} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
+                    {user.name[0]}
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-white text-sm font-semibold truncate">{user.name}</p>
+                    <p className="text-gray-400 text-xs truncate">@{user.username}</p>
+                  </div>
+                </div>
+                <button 
+                  className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log('Follow button clicked');
+                  }}
+                >
                   팔로우
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
         </Slider>
       )}
@@ -91,18 +102,28 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'clubs' && (
         <Slider {...settings}>
           {clubs.map((club) => (
-            <div key={club.id} className={`bg-gray-800 rounded-lg p-3 flex items-center transition-colors duration-200 ${activeTab === 'clubs' ? 'hover:bg-gray-600' : ''} mx-2 mb-4`}>
-              <div className={`w-12 h-12 ${club.color} rounded-full flex items-center justify-center text-xl font-bold text-white mr-3`}>
-                {club.name[0]}
-              </div>
-              <div className="flex flex-col">
-                <p className="text-white text-sm font-semibold text-center truncate">{club.name}</p>
-                <p className="text-gray-400 text-xs text-center truncate">@{club.clubName}</p>
-                <button className="bg-blue-500 text-white text-xs font-bold py-1 px-2 rounded-full hover:bg-blue-600 transition duration-200 mt-1">
+            <Link key={club.id} href={`/clubs/${club.id}`}>
+              <div className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+                <div className="flex items-center mb-3">
+                  <div className={`w-12 h-12 ${club.color} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
+                    {club.name[0]}
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-white text-sm font-semibold truncate">{club.name}</p>
+                    <p className="text-gray-400 text-xs truncate">@{club.clubName}</p>
+                  </div>
+                </div>
+                <button 
+                  className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    console.log('Join button clicked');
+                  }}
+                >
                   가입
                 </button>
               </div>
-            </div>
+            </Link>
           ))}
         </Slider>
       )}
