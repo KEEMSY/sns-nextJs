@@ -54,7 +54,6 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
 
   return (
     <div className="bg-[#1e1e1e] rounded-xl p-4 my-4 shadow-lg" style={{ margin: '10px 15px' }}>
-                   
       <div className="flex justify-center space-x-4 mb-4">
         <button
           className={`text-white font-semibold ${activeTab === 'users' ? 'border-b-2 border-blue-500' : ''}`}
@@ -73,8 +72,8 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'users' && (
         <Slider {...settings}>
           {users.map((user) => (
-            <Link key={user.id} href={`/profile/${user.username}`}>
-              <div className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+            <div key={user.id} className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+              <Link href={`/profile/${user.id}`}>
                 <div className="flex items-center mb-3">
                   <div className={`w-12 h-12 ${user.color} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
                     {user.name[0]}
@@ -84,17 +83,17 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
                     <p className="text-gray-400 text-xs truncate">@{user.username}</p>
                   </div>
                 </div>
-                <button 
-                  className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log('Follow button clicked');
-                  }}
-                >
-                  팔로우
-                </button>
-              </div>
-            </Link>
+              </Link>
+              <button 
+                className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log('Follow button clicked');
+                }}
+              >
+                팔로우
+              </button>
+            </div>
           ))}
         </Slider>
       )}
@@ -102,28 +101,27 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'clubs' && (
         <Slider {...settings}>
           {clubs.map((club) => (
-            <Link key={club.id} href={`/clubs/${club.id}`}>
-              <div className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+            <div key={club.id} className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+              <Link href={`/clubs/${club.id}`}>
                 <div className="flex items-center mb-3">
                   <div className={`w-12 h-12 ${club.color} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
                     {club.name[0]}
                   </div>
                   <div className="ml-3">
                     <p className="text-white text-sm font-semibold truncate">{club.name}</p>
-                    <p className="text-gray-400 text-xs truncate">@{club.clubName}</p>
                   </div>
                 </div>
-                <button 
-                  className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    console.log('Join button clicked');
-                  }}
-                >
-                  가입
-                </button>
-              </div>
-            </Link>
+              </Link>
+              <button 
+                className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log('Join club button clicked');
+                }}
+              >
+                가입하기
+              </button>
+            </div>
           ))}
         </Slider>
       )}
