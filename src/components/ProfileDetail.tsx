@@ -1,28 +1,26 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaInstagram, FaCamera, FaPen, FaUserPlus } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
 import Layout from './Layout'
 import ComposeModal from './ComposeModal'
+import { dummyUsers } from '../lib/dummyData'
 
 interface ProfileDetailProps {
-  username: string
+  userId: string;
 }
 
-const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
+const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('threads')
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
-  
-  // 이 부분은 실제 데이터로 대체해야 합니다
-  const user = {
-    name: 'KEEMSY',
-    username: 'keemsy',
-    bio: '🇰🇷',
-    followers: 7777,
-    following: 777,
-  }
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    const foundUser = dummyUsers.find(u => u.id === userId)
+    setUser(foundUser || dummyUsers[0]) // 일치하는 사용자가 없으면 첫 번째 사용자 정보를 사용
+  }, [userId])
 
   const renderContent = () => {
     switch(activeTab) {
@@ -37,6 +35,10 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
     }
   }
 
+  if (!user) {
+    return <div>Loading...</div>
+  }
+
   return (
     <Layout
       title="프로필"
@@ -47,7 +49,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ username }) => {
           <div>
             <p className="text-lg">{user.bio}</p>
             <h2 className="text-2xl font-bold">{user.name}</h2>
-            <p className="text-gray-500">{user.username}</p>
+            <p className="text-gray-500">@{user.username}</p>
             <p className="text-gray-500 mt-2">팔로워 {user.followers}명</p>
           </div>
           <div className="flex flex-col items-end">
