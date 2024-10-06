@@ -1,47 +1,17 @@
 'use client'
 
-// 피드 클릭 시, 상세 페이지로 가지 않는 이슈 발생
-// 피드 내 추천 영역 내 프로필 및 클럽 클릭 시, 해당 상세 페이지로 갈 수 있도록 코드 수정 필요
-
-
-
-// 더미 포스트 데이터 추가
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Post from './Post'
 import Recommendations from './Recommendations'
+import { dummyPosts, dummyUsers, dummyClubs } from '../lib/dummyData'
 import { FaImage, FaGift, FaPoll, FaSmile } from 'react-icons/fa'
-import Link from 'next/link';
+import Link from 'next/link'
 
-// 더미 데이터 추가
-const dummyUsers = [
-  { id: '1', name: '김철수', username: 'chulsoo', color: 'bg-red-500' },
-  { id: '2', name: '이영희', username: 'younghee', color: 'bg-blue-500' },
-  { id: '3', name: '박지성', username: 'jisung', color: 'bg-green-500' },
-  { id: '4', name: '최민수', username: 'minsu', color: 'bg-yellow-500' },
-  { id: '5', name: '정소연', username: 'soyeon', color: 'bg-purple-500' },
-];
-
-const dummyClubs = [
-  { id: '1', name: 'BTS', color: 'bg-purple-500', clubName: 'BTS' },
-  { id: '2', name: 'BLACKPINK', color: 'bg-pink-500', clubName: 'BLACKPINK' },
-  { id: '3', name: 'EXO', color: 'bg-blue-500', clubName: 'EXO' },
-  { id: '4', name: 'TWICE', color: 'bg-yellow-500', clubName: 'TWICE' },
-  { id: '5', name: 'NCT', color: 'bg-green-500', clubName: 'NCT' },
-];
-
-// 더미 포스트 데이터 추가
-const dummyPosts = Array.from({ length: 100 }, (_, i) => ({
-  id: `post-${i + 1}`,
-  content: `이것은 더미 포스트 ${i + 1}입니다.`,
-  author: dummyUsers[Math.floor(Math.random() * dummyUsers.length)],
-  createdAt: new Date(Date.now() - Math.random() * 10000000000).toISOString(),
-  likes: Math.floor(Math.random() * 100),
-  comments: Math.floor(Math.random() * 20),
-}));
+const POSTS_PER_PAGE = 10;
 
 export default function Feed() {
   const [newPost, setNewPost] = useState('')
-  const [posts, setPosts] = useState<typeof dummyPosts>([])
+  const [displayedPosts, setDisplayedPosts] = useState<typeof dummyPosts>([])
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
@@ -67,8 +37,8 @@ export default function Feed() {
   const loadMorePosts = () => {
     setLoading(true)
     setTimeout(() => {
-      const newPosts = dummyPosts.slice((page - 1) * 10, page * 10)
-      setPosts(prevPosts => [...prevPosts, ...newPosts])
+      const newPosts = dummyPosts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE)
+      setDisplayedPosts(prevPosts => [...prevPosts, ...newPosts])
       setPage(prevPage => prevPage + 1)
       setHasMore(newPosts.length > 0)
       setLoading(false)
@@ -129,17 +99,17 @@ export default function Feed() {
         </form>
       </div>
       <div>
-        {posts.map((post, index) => (
+        {displayedPosts.map((post, index) => (
           <React.Fragment key={post.id}>
-            <Link href={`/post/${post.id.replace('post-', '')}`} passHref>
+            <Link href={`/post/${post.id}`} passHref>
               <div className="cursor-pointer">
-                <Post post={{...post, id: Number(post.id.replace('post-', '')), timestamp: post.createdAt, reposts: 0}} />
+                <Post post={post} />
               </div>
             </Link>
             {recommendations[Math.floor(index / 30)] && (index + 1) % 30 === 0 && (
               <Recommendations {...recommendations[Math.floor(index / 30)]} />
             )}
-            {index === posts.length - 1 && (
+            {index === displayedPosts.length - 1 && (
               <div ref={lastPostElementRef}></div>
             )}
           </React.Fragment>
