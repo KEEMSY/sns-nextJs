@@ -6,7 +6,7 @@ import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
 import Layout from './Layout'
 import ComposeModal from './ComposeModal'
-import { dummyUsers } from '../lib/dummyData'
+import { dummyCurrentUser, dummyUsers } from '../lib/dummyData'
 
 interface ProfileDetailProps {
   userId: string;
@@ -18,9 +18,11 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
-    const foundUser = dummyUsers.find(u => u.id === userId)
-    setUser(foundUser || dummyUsers[0]) // 일치하는 사용자가 없으면 첫 번째 사용자 정보를 사용
-  }, [userId])
+    const foundUser = dummyUsers.find(u => u.id === userId) || dummyCurrentUser;
+    setUser(foundUser);
+  }, [userId]);
+
+  const isCurrentUser = user?.id === dummyCurrentUser.id
 
   const renderContent = () => {
     switch(activeTab) {
@@ -62,9 +64,11 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             </div>
           </div>
         </div>
-        <button className="bg-[#1a1a1a] text-white font-bold py-2 px-4 rounded-full w-full mb-4">
-          프로필 수정
-        </button>
+        {isCurrentUser && (
+          <button className="bg-[#1a1a1a] text-white font-bold py-2 px-4 rounded-full w-full mb-4">
+            프로필 수정
+          </button>
+        )}
         <div className="flex">
           <button
             className={`flex-1 py-2 ${activeTab === 'threads' ? 'border-b-2 border-white' : ''}`}
@@ -108,44 +112,46 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             </div>
           </div>
 
-          <div className="p-4 bg-[#101010]">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-lg">프로필 완성하기</h3>
-              <span className="text-gray-500 text-sm">4개 남음</span>
+          {isCurrentUser && (
+            <div className="p-4 bg-[#101010]">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="font-bold text-lg">프로필 완성하기</h3>
+                <span className="text-gray-500 text-sm">4개 남음</span>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                  <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                    <FaCamera className="text-white" size={24} />
+                  </div>
+                  <h4 className="font-semibold mb-1">프로필 사진 추가</h4>
+                  <p className="text-gray-500 text-sm mb-3">사람들이 회원님을 알아볼 수 있게 설정해보세요.</p>
+                  <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                    추가
+                  </button>
+                </div>
+                <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                  <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                    <FaPen className="text-white" size={24} />
+                  </div>
+                  <h4 className="font-semibold mb-1">소개 추가</h4>
+                  <p className="text-gray-500 text-sm mb-3">회원님을 소개하고 사람들에게 회원님의 관심사를 알려주세요.</p>
+                  <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                    추가
+                  </button>
+                </div>
+                <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
+                  <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
+                    <FaUserPlus className="text-white" size={24} />
+                  </div>
+                  <h4 className="font-semibold mb-1">프로필 5개 팔로우</h4>
+                  <p className="text-gray-500 text-sm mb-3">관심 있는 스레드로 피드를 채워 보세요.</p>
+                  <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
+                    프로필 보기
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
-                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
-                  <FaCamera className="text-white" size={24} />
-                </div>
-                <h4 className="font-semibold mb-1">프로필 사진 추가</h4>
-                <p className="text-gray-500 text-sm mb-3">사람들이 회원님을 알아볼 수 있게 설정해보세요.</p>
-                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
-                  추가
-                </button>
-              </div>
-              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
-                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
-                  <FaPen className="text-white" size={24} />
-                </div>
-                <h4 className="font-semibold mb-1">소개 추가</h4>
-                <p className="text-gray-500 text-sm mb-3">회원님을 소개하고 사람들에게 회원님의 관심사를 알려주세요.</p>
-                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
-                  추가
-                </button>
-              </div>
-              <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
-                <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
-                  <FaUserPlus className="text-white" size={24} />
-                </div>
-                <h4 className="font-semibold mb-1">프로필 5개 팔로우</h4>
-                <p className="text-gray-500 text-sm mb-3">관심 있는 스레드로 피드를 채워 보세요.</p>
-                <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
-                  프로필 보기
-                </button>
-              </div>
-            </div>
-          </div>
+          )}
         </>
       )}
 
