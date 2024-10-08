@@ -2,17 +2,16 @@
 
 import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { useSession, signOut } from 'next-auth/react'
-import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUserPlus, FaUsers } from 'react-icons/fa'
+import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUsers, FaSignOutAlt } from 'react-icons/fa'
 import ComposeModal from './ComposeModal'
 import SignUpModal from './SignUpModal'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Sidebar() {
-  const { data: session } = useSession()
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false)
   const composeButtonRef = useRef<HTMLButtonElement>(null)
-  const signUpButtonRef = useRef<HTMLButtonElement>(null)
+  const { isLoggedIn, user, logout } = useAuth()
 
   const handleComposeClick = () => {
     setIsComposeModalOpen(true)
@@ -28,9 +27,6 @@ export default function Sidebar() {
     if (composeButtonRef.current) {
       composeButtonRef.current.blur()
     }
-    if (signUpButtonRef.current) {
-      signUpButtonRef.current.blur()
-    }
   }
 
   return (
@@ -42,7 +38,7 @@ export default function Sidebar() {
           <NavItem href="/search" icon={FaSearch} />
           <NavItem href="/notifications" icon={FaHeart} />
           <NavItem href="/clubs" icon={FaUsers} /> 
-          <NavItem href="/profile" icon={FaUser} />
+          <NavItem href={isLoggedIn ? `/profile/${user?.id}` : "/profile"} icon={FaUser} />
           <button
             ref={composeButtonRef}
             onClick={handleComposeClick}
@@ -51,20 +47,12 @@ export default function Sidebar() {
             <FaFeatherAlt className="text-2xl" />
           </button>
         </nav>
-        {session ? (
-          <button 
-            onClick={() => signOut()} 
-            className="text-gray-400 hover:text-white transition duration-200"
-          >
-            로그아웃
-          </button>
-        ) : (
+        {isLoggedIn && (
           <button
-            ref={signUpButtonRef}
-            onClick={handleSignUpClick}
-            className="flex items-center justify-center w-12 h-12 rounded-full transition duration-200 hover:bg-gray-800 hover:text-blue-400 focus:outline-none"
+            onClick={logout}
+            className="flex items-center justify-center w-12 h-12 rounded-full transition duration-200 hover:bg-gray-800 hover:text-blue-400 focus:outline-none mt-auto"
           >
-            <FaUserPlus className="text-2xl" />
+            <FaSignOutAlt className="text-2xl" />
           </button>
         )}
       </aside>

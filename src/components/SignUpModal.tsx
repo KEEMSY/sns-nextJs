@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaGoogle, FaComment } from 'react-icons/fa';
 import { SiNaver } from 'react-icons/si';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
 
 interface SignUpModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
   const [password, setPassword] = useState('');
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { login } = useAuth();
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
@@ -42,6 +44,17 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
     console.log('비밀번호 재설정 이메일 전송:', email);
     alert('비밀번호 재설정 링크가 이메일로 전송되었습니다.');
     setIsForgotPassword(false);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isSignUp) {
+      console.log('회원가입:', { email, password });
+      alert('회원가입 기능은 아직 구현되지 않았습니다.');
+    } else {
+      login(email, password);
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -94,7 +107,7 @@ const SignUpModal: React.FC<SignUpModalProps> = ({ isOpen, onClose }) => {
                 <h2 className="text-2xl font-bold mb-6 text-center text-white">
                   {isSignUp ? '회원가입' : '로그인'}
                 </h2>
-                <form className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <input
                     type="email"
                     placeholder="이메일"
