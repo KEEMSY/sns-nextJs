@@ -5,7 +5,7 @@ interface PostProps {
   post: {
     id: string;
     author: {
-      id: string;
+      userId: string;
       name: string;
       username: string;
       color: string;
@@ -22,13 +22,13 @@ const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <div className="border-b border-gray-800 p-4">
       <div className="flex items-start mb-2">
-        <Link href={`/profile/${post.author.id}`}>
+        <Link href={`/profile/${post.author.userId}`}>
           <div className={`w-10 h-10 ${post.author.color} rounded-full flex items-center justify-center text-white font-bold mr-3`}>
             {post.author.name[0]}
           </div>
         </Link>
         <div>
-          <Link href={`/profile/${post.author.id}`}>
+          <Link href={`/profile/${post.author.userId}`}>
             <h3 className="font-bold text-white hover:underline">{post.author.name}</h3>
           </Link>
           <p className="text-gray-500">@{post.author.username}</p>

@@ -3,7 +3,7 @@ import Slider from 'react-slick';
 import Link from 'next/link';
 
 interface User {
-  id: string;
+  userId: string;
   name: string;
   username: string;
   color: string;
@@ -72,8 +72,8 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
       {activeTab === 'users' && (
         <Slider {...settings}>
           {users.map((user) => (
-            <div key={user.id} className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
-              <Link href={`/profile/${user.id}`}>
+            <div key={user.userId} className="bg-gray-800 rounded-lg p-4 mx-2 mb-4 transition-all duration-200 hover:bg-gray-700 hover:shadow-lg">
+              <Link href={`/profile/${user.userId}`}>
                 <div className="flex items-center mb-3">
                   <div className={`w-12 h-12 ${user.color} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
                     {user.name[0]}
@@ -88,7 +88,7 @@ const Recommendations: React.FC<RecommendationsProps> = ({ users, clubs }) => {
                 className="w-full bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded-full hover:bg-blue-600 transition duration-200"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log('Follow button clicked');
+                  console.log('Follow button clicked for user:', user.userId);
                 }}
               >
                 팔로우

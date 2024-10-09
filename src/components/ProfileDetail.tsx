@@ -18,11 +18,11 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
-    const foundUser = dummyUsers.find(u => u.id === userId) || dummyCurrentUser;
-    setUser(foundUser);
+    const foundUser = dummyUsers.find(u => u.userId === userId);
+    setUser(foundUser || null);
   }, [userId]);
 
-  const isCurrentUser = user?.id === dummyCurrentUser.id
+  const isCurrentUser = user?.userId === dummyCurrentUser.userId
 
   const renderContent = () => {
     switch(activeTab) {
