@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
@@ -25,15 +26,20 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, title, additionalContent, showBackButton = true, showToggle = false, options = [] }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    router.back();
+  };
 
   return (
     <div className="bg-black min-h-screen text-white flex flex-col">
       <header className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 p-4">
         <div className="flex justify-between items-start">
           {showBackButton ? (
-            <Link href="/" className="text-white">
+            <button onClick={handleBackClick} className="text-white">
               <FaArrowLeft size={20} />
-            </Link>
+            </button>
           ) : (
             <div className="w-5" />
           )}
