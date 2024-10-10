@@ -12,6 +12,7 @@ interface PostProps {
     };
     content: string;
     createdAt: string;
+    createdAtFormatted: string;
     likes: number;
     comments: number;
     reposts: number;
@@ -27,20 +28,33 @@ const Post: React.FC<PostProps> = ({ post }) => {
             {post.author.name[0]}
           </div>
         </Link>
-        <div>
-          <Link href={`/profile/${post.author.userId}`}>
-            <h3 className="font-bold text-white hover:underline">{post.author.name}</h3>
-          </Link>
-          <p className="text-gray-500">@{post.author.username}</p>
+        <div className="flex-grow">
+          <div className="flex items-center">
+            <Link href={`/profile/${post.author.userId}`}>
+              <h3 className="font-bold text-white hover:underline mr-2">{post.author.name}</h3>
+            </Link>
+            <p className="text-gray-500 text-sm">@{post.author.username}</p>
+          </div>
+          <p className="text-gray-500 text-sm mt-1">{post.createdAtFormatted}</p>
         </div>
       </div>
-      <p className="text-white mb-2">{post.content}</p>
-      <p className="text-gray-500 mb-2">{post.createdAt}</p>
-      <div className="flex justify-between text-gray-500">
-        <span><FaComment className="inline mr-1" /> {post.comments}</span>
-        <span><FaRetweet className="inline mr-1" /> {post.reposts}</span>
-        <span><FaHeart className="inline mr-1" /> {post.likes}</span>
-        <FaBookmark />
+      <p className="text-white mb-4">{post.content}</p>
+      <div className="flex justify-center space-x-12 text-gray-500 mt-9">
+        <button className="flex items-center space-x-2 hover:text-blue-500 transition-colors duration-200">
+          <FaComment className="text-lg" />
+          <span>{post.comments}</span>
+        </button>
+        <button className="flex items-center space-x-2 hover:text-green-500 transition-colors duration-200">
+          <FaRetweet className="text-lg" />
+          <span>{post.reposts}</span>
+        </button>
+        <button className="flex items-center space-x-2 hover:text-red-500 transition-colors duration-200">
+          <FaHeart className="text-lg" />
+          <span>{post.likes}</span>
+        </button>
+        <button className="flex items-center hover:text-blue-500 transition-colors duration-200">
+          <FaBookmark className="text-lg" />
+        </button>
       </div>
     </div>
   );
