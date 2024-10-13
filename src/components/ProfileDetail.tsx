@@ -38,7 +38,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   }
 
   if (!user) {
-    return <div>Loading...</div>
+    return <div className="flex justify-center items-center h-full">Loading...</div>
   }
 
   return (
