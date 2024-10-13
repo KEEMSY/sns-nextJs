@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { FaArrowLeft, FaChevronDown } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { motion, AnimatePresence } from 'framer-motion';
