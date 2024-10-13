@@ -38,7 +38,7 @@ export default function Sidebar() {
           <NavItem href="/search" icon={FaSearch} />
           <NavItem href="/notifications" icon={FaHeart} />
           <NavItem href="/clubs" icon={FaUsers} /> 
-          <NavItem href={isLoggedIn ? `/profile/${user?.id}` : "/profile"} icon={FaUser} />
+          <NavItem href={isLoggedIn ? `/profile/${user?.userId}` : "/profile"} icon={FaUser} />
           <button
             ref={composeButtonRef}
             onClick={handleComposeClick}

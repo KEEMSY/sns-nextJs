@@ -1,5 +1,5 @@
 export const dummyCurrentUser = {
-  userId: 'user1',
+  userId: '1',
   name: 'KEEMSY',
   username: 'keemsy',
   bio: '🇰🇷 웹 개발자 | 커피 애호가',
@@ -59,16 +59,48 @@ export const dummyPosts = Array.from({ length: 100 }, (_, index) => {
   const baseIndex = index % baseData.length;
   const basePost = baseData[baseIndex];
   
+  const date = new Date(Date.now() - Math.random() * 10000000000);
+  
   return {
     id: `${index + 1}`,
     content: `${basePost.content} (게시물 ${index + 1})`,
     author: basePost.author,
-    timestamp: new Date(Date.now() - Math.random() * 10000000000).toISOString(),
+    createdAt: date.toISOString(), // ISO 문자열로 저장
+    createdAtFormatted: formatDate(date), // 포맷된 문자열 추가
     likes: Math.floor(Math.random() * 1000),
     comments: Math.floor(Math.random() * 100),
     reposts: Math.floor(Math.random() * 50),
   };
-});
+}).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // 날짜 기준 내림차순 정렬
+
+// 날짜 포맷팅 함수 추가
+function formatDate(date: Date): string {
+  const now = new Date();
+  const diffTime = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffTime / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffSeconds < 60) {
+    return `${diffSeconds}초 전`;
+  } else if (diffMinutes < 60) {
+    return `${diffMinutes}분 전`;
+  } else if (diffHours < 24) {
+    return `${diffHours}시간 전`;
+  } else if (diffDays === 1) {
+    return '어제';
+  } else if (diffDays < 7) {
+    return `${diffDays}일 전`;
+  } else {
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+}
+
+// 필요한 경우 실시간 업데이트를 위한 함수
+export const getFormattedDate = (dateString: string) => {
+  return formatDate(new Date(dateString));
+};
 
 export type Comment = {
   id: string;
@@ -88,7 +120,7 @@ export const dummyComments: Comment[] = [
   {
     id: '1',
     author: {
-      userId: 'user2',
+      userId: '2',
       name: '김철수',
       username: 'chulsoo_kim',
       avatar: 'https://via.placeholder.com/40'
@@ -96,12 +128,12 @@ export const dummyComments: Comment[] = [
     content: '멋진 프로젝트네요! 화이팅!',
     createdAt: '30분 전',
     likes: 149,
-    postId: 'post-1'
+    postId: '1'
   },
   {
     id: '2',
     author: {
-      userId: 'user3',
+      userId: '3',
       name: '이영희',
       username: 'younghee_lee',
       avatar: 'https://via.placeholder.com/40'
@@ -109,12 +141,12 @@ export const dummyComments: Comment[] = [
     content: '정말 좋아요! 응원합니다.',
     createdAt: '5분 전',
     likes: 72,
-    postId: 'post-1'
+    postId: '1'
   },
   {
     id: '3',
     author: {
-      userId: 'user4',
+      userId: '4',
       name: '박지성',
       username: 'jisung_park',
       avatar: 'https://via.placeholder.com/40'
@@ -122,12 +154,12 @@ export const dummyComments: Comment[] = [
     content: '멋진 사진이네요!',
     createdAt: '30분 전',
     likes: 95,
-    postId: 'post-2'
+    postId: '2'
   },
   {
     id: '4',
     author: {
-      userId: 'user5',
+      userId: '5',
       name: '최민수',
       username: 'minsoo_choi',
       avatar: 'https://via.placeholder.com/40'
@@ -135,12 +167,12 @@ export const dummyComments: Comment[] = [
     content: '와우, 대단해요!',
     createdAt: '1시간 전',
     likes: 128,
-    postId: 'post-3'
+    postId: '3'
   },
   {
     id: '5',
     author: {
-      userId: 'user6',
+      userId: '6',
       name: '손흥민',
       username: 'sonny',
       avatar: 'https://via.placeholder.com/40'
@@ -148,12 +180,12 @@ export const dummyComments: Comment[] = [
     content: '멋진 게시물이에요!',
     createdAt: '3시간 전',
     likes: 87,
-    postId: 'post-4'
+    postId: '4'
   },
   {
     id: '6',
     author: {
-      userId: 'user7',
+      userId: '7',
       name: '김연아',
       username: 'yuna_kim',
       avatar: 'https://via.placeholder.com/40'
@@ -161,12 +193,12 @@ export const dummyComments: Comment[] = [
     content: '정말 인상적이네요!',
     createdAt: '4시간 전',
     likes: 156,
-    postId: 'post-5'
+    postId: '5'
   },
   {
     id: '7',
     author: {
-      userId: 'user8',
+      userId: '8',
       name: '류현진',
       username: 'hyunjin_ryu',
       avatar: 'https://via.placeholder.com/40'
@@ -174,12 +206,12 @@ export const dummyComments: Comment[] = [
     content: '멋진 내용이에요!',
     createdAt: '5시간 전',
     likes: 64,
-    postId: 'post-6'
+    postId: '6'
   },
   {
     id: '8',
     author: {
-      userId: 'user10',
+      userId: '10',
       name: '김연경',
       username: 'yeon_koung_kim',
       avatar: 'https://via.placeholder.com/40'
@@ -187,7 +219,7 @@ export const dummyComments: Comment[] = [
     content: '좋아요!',
     createdAt: '7시간 전',
     likes: 112,
-    postId: 'post-7'
+    postId: '7'
   }
 ];
 
