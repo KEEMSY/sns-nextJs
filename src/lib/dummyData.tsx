@@ -256,7 +256,7 @@ export type Notification = {
 };
 
 export const dummyNotifications: Notification[] = [
-  { id: 1, type: 'follow', user: '김철수', userId: 'user2', content: '님이 회원님을 팔로우하기 시작했습니다.', time: '방금 전' },
+  { id: 1, type: 'follow', user: '김철수', userId: 'user2', content: '님이 회원님을 팔로우하기 시작���습니다.', time: '방금 전' },
   { id: 2, type: 'like', user: '이영희', userId: 'user3', content: '님이 회원님의 게시물을 좋아합니다.', time: '5분 전', targetPostId: '1' },
   { id: 3, type: 'comment', user: '박지성', userId: 'user4', content: '님이 회원님의 게시물에 댓글을 남겼습니다: "멋진 프로젝트네요!"', time: '30분 전', targetPostId: '1' },
   { id: 4, type: 'repost', user: '최민수', userId: 'user5', content: '님이 회원님의 게시물을 리포스트했습니다.', time: '1시간 전', targetPostId: '1' },
@@ -266,4 +266,118 @@ export const dummyNotifications: Notification[] = [
   { id: 8, type: 'repost', user: '박태환', userId: 'user9', content: '님이 회원님의 게시물을 리포스트했습니다.', time: '5시간 전', targetPostId: '3' },
   { id: 9, type: 'follow', user: '김연경', userId: 'user10', content: '님이 회원님을 팔로우하기 시작했습니다.', time: '6시간 전' },
   { id: 10, type: 'like', user: '김철수', userId: 'user2', content: '님이 회원님의 게시물을 좋아합니다.', time: '7시간 전', targetPostId: '4' },
+];
+
+export type ClubNotice = {
+  id: string;
+  clubId: string;
+  title: string;
+  content: string;
+  author: {
+    userId: string;
+    name: string;
+    username: string;
+  };
+  createdAt: string;
+};
+
+export const dummyClubNotices: ClubNotice[] = [
+  {
+    id: '1',
+    clubId: '1',
+    title: 'BTS 새 앨범 발매 안내',
+    content: '다음 달 1일 새 앨범이 발매됩니다. 많은 관심 부탁드립니다!',
+    author: { userId: 'user1', name: '방탄소년단 매니저', username: 'bts_manager' },
+    createdAt: '2023-05-15T10:00:00Z',
+  },
+  {
+    id: '2',
+    clubId: '1',
+    title: '팬미팅 일정 변경 안내',
+    content: '예정되었던 팬미팅 일정이 변경되었습니다. 자세한 내용은 공지를 확인해주세요.',
+    author: { userId: 'user1', name: '방탄소년단 매니저', username: 'bts_manager' },
+    createdAt: '2023-05-10T14:30:00Z',
+  },
+  {
+    id: '3',
+    clubId: '2',
+    title: 'BLACKPINK 월드투어 안내',
+    content: '다음 달부터 시작되는 월드투어 일정을 안내드립니다.',
+    author: { userId: 'user2', name: 'BLACKPINK 매니저', username: 'bp_manager' },
+    createdAt: '2023-05-05T09:15:00Z',
+  },
+  {
+    id: '4',
+    clubId: '2',
+    title: '새 멤버십 상품 출시',
+    content: 'BLACKPINK 새 멤버십 상품이 출시되었습니다. 많은 관심 부탁드립니다!',
+    author: { userId: 'user2', name: 'BLACKPINK 매니저', username: 'bp_manager' },
+    createdAt: '2023-04-30T11:45:00Z',
+  },
+  // ... 다른 클럽들의 공지사항도 추가할 수 있습니다.
+];
+
+export type ClubPost = {
+  id: string;
+  clubId: string;
+  content: string;
+  author: {
+    userId: string;
+    name: string;
+    username: string;
+  };
+  createdAt: string;
+  likes: number;
+  comments: number;
+};
+
+export const dummyClubPosts: ClubPost[] = [
+  {
+    id: '1',
+    clubId: '1',
+    content: 'BTS의 새 앨범 정말 기대돼요! 여러분은 어떤 곡이 가장 기대되나요?',
+    author: { userId: 'user1', name: 'ARMY팬', username: 'bts_army' },
+    createdAt: '2023-05-20T10:00:00Z',
+    likes: 150,
+    comments: 45,
+  },
+  {
+    id: '2',
+    clubId: '1',
+    content: '다음 주 팬미팅 참석하시는 분들 계신가요? 함께 가실 분 구해요!',
+    author: { userId: 'user2', name: '뷔사랑', username: 'v_love' },
+    createdAt: '2023-05-19T15:30:00Z',
+    likes: 89,
+    comments: 32,
+  },
+  // ... 더 많은 게시물 추가
+];
+
+export type MarketItem = {
+  id: string;
+  clubId: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+};
+
+export const dummyMarketItems: MarketItem[] = [
+  {
+    id: '1',
+    clubId: '1',
+    name: 'BTS 공식 응원봉',
+    description: '2023 신규 디자인 BTS 공식 응원봉',
+    price: 55000,
+    image: 'https://via.placeholder.com/150',
+  },
+  {
+    id: '2',
+    clubId: '1',
+    name: 'BTS 포토북',
+    description: '멤버들의 미공개 사진이 담긴 한정판 포토북',
+    price: 40000,
+    image: 'https://via.placeholder.com/150',
+  },
+  // ... 더 많은 아이템 추가
 ];
