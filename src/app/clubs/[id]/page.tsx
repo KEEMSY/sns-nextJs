@@ -3,11 +3,15 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Layout from '../../../components/Layout';
+import ClubPostList from '../../../components/ClubPostList';
+import ClubNotices from '../../../components/ClubNotices';
+import { motion, AnimatePresence } from 'framer-motion';
+import ClubMarket from '../../../components/ClubMarket';
 
 // Define the type for clubData
 type ClubData = {
   id: string;
-  name: string;
+  name: string; 
   color: string;
   memberCount: number;
   description: string;
@@ -24,9 +28,11 @@ const dummyClubs: ClubData[] = [
   { id: '8', name: 'ITZY', color: 'bg-orange-500', memberCount: 8000000, description: 'ITZY 팬클럽' },
 ];
 
+
 const ClubDetail = () => {
   const params = useParams();
   const [club, setClub] = useState<ClubData | null>(null);
+  const [activeTab, setActiveTab] = useState('community');
 
   useEffect(() => {
     const id = params.id as string;
@@ -37,7 +43,7 @@ const ClubDetail = () => {
   }, [params]);
 
   if (!club) {
-    return <Layout title="로딩 중..."><div className="p-4">로딩 중...</div></Layout>;
+    return <Layout title="로딩 중..."><div className="text-center p-4">Loading...</div></Layout>;
   }
 
   return (
@@ -53,9 +59,52 @@ const ClubDetail = () => {
             </svg>
             <span className="text-xl text-gray-300">멤버: {club.memberCount.toLocaleString()}</span>
           </div>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mb-6">
             클럽 가입하기
           </button>
+
+          <div className="mb-6">
+            <div className="flex justify-center border-b border-gray-700">
+              {['community', 'notices', 'market'].map((tab) => (
+                <button
+                  key={tab}
+                  className={`px-8 py-4 font-medium text-lg transition-all duration-300 relative ${
+                    activeTab === tab
+                      ? 'text-blue-500'
+                      : 'text-gray-400 hover:text-gray-200'
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab === 'community' && '커뮤니티'}
+                  {tab === 'notices' && '공지사항'}
+                  {tab === 'market' && '마켓'}
+                  {activeTab === tab && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"
+                      layoutId="underline"
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+                className="w-full"
+              >
+                {activeTab === 'community' && <ClubPostList clubId={club.id} />}
+                {activeTab === 'notices' && <ClubNotices clubId={club.id} />}
+                {activeTab === 'market' && <ClubMarket clubId={club.id} />}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </Layout>
