@@ -4,34 +4,57 @@ import React, { useState, useEffect } from 'react'
 import { FaInstagram, FaCamera, FaPen, FaUserPlus } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
+import { motion } from 'framer-motion'
 import Layout from './Layout'
 import ComposeModal from './ComposeModal'
-import { dummyCurrentUser, dummyUsers } from '../lib/dummyData'
+import { dummyClubs, dummyCurrentUser, dummyUsers } from '../lib/dummyData'
 
 interface ProfileDetailProps {
   userId: string;
 }
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
-  const [activeTab, setActiveTab] = useState('threads')
+  const [activeTab, setActiveTab] = useState<TabType>('threads')
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [userClubs, setUserClubs] = useState<any[]>([])
 
   useEffect(() => {
     const foundUser = dummyUsers.find(u => u.userId === userId);
     setUser(foundUser || null);
+    setUserClubs(dummyClubs.slice(0, 3));
   }, [userId]);
 
   const isCurrentUser = user?.userId === dummyCurrentUser.userId
+
+  const tabs = ['threads', 'reposts', 'clubs'] as const;
+  type TabType = typeof tabs[number];
+  const tabNames: Record<TabType, string> = {
+    threads: '스레드',
+    reposts: '리포스트',
+    clubs: '클럽'
+  }
 
   const renderContent = () => {
     switch(activeTab) {
       case 'threads':
         return <div>스레드 내용</div>
-      case 'replies':
-        return <div>답글 내용</div>
       case 'reposts':
         return <div>리포스트 내용</div>
+      case 'clubs':
+        return (
+          <div className="grid grid-cols-2 gap-4">
+            {userClubs.map(club => (
+              <div key={club.id} className="bg-gray-800 p-4 rounded-lg">
+                <div className={`w-12 h-12 ${club.color} rounded-full flex items-center justify-center text-xl font-bold text-white mb-2`}>
+                  {club.name[0]}
+                </div>
+                <h3 className="text-white font-semibold">{club.name}</h3>
+                <p className="text-gray-400 text-sm">{club.memberCount.toLocaleString()} 멤버</p>
+              </div>
+            ))}
+          </div>
+        )
       default:
         return null
     }
@@ -69,25 +92,27 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             프로필 수정
           </button>
         )}
-        <div className="flex">
-          <button
-            className={`flex-1 py-2 ${activeTab === 'threads' ? 'border-b-2 border-white' : ''}`}
-            onClick={() => setActiveTab('threads')}
-          >
-            스레드
-          </button>
-          <button
-            className={`flex-1 py-2 ${activeTab === 'replies' ? 'border-b-2 border-white' : ''}`}
-            onClick={() => setActiveTab('replies')}
-          >
-            답글
-          </button>
-          <button
-            className={`flex-1 py-2 ${activeTab === 'reposts' ? 'border-b-2 border-white' : ''}`}
-            onClick={() => setActiveTab('reposts')}
-          >
-            리포스트
-          </button>
+        <div className="flex justify-center mt-3 mb-4 relative w-full">
+          <div className="relative flex w-full max-w-2xl justify-between">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                className={`text-white font-semibold px-4 py-2 flex-1 text-lg ${activeTab === tab ? 'text-blue-500' : ''}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tabNames[tab]}
+              </button>
+            ))}
+            <motion.div
+              className="absolute bottom-0 h-0.5 bg-blue-500"
+              initial={false}
+              animate={{
+                left: `calc(${tabs.indexOf(activeTab) * 33.33}% + 5%)`,
+                width: '23.33%'
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+          </div>
         </div>
       </div>
 
