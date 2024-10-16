@@ -238,11 +238,11 @@ export const dummyUsers = [
 );
 
 export const dummyClubs = [
-  { id: '1', name: 'BTS', color: 'bg-purple-500', clubName: 'BTS' },
-  { id: '2', name: 'BLACKPINK', color: 'bg-pink-500', clubName: 'BLACKPINK' },
-  { id: '3', name: 'EXO', color: 'bg-blue-500', clubName: 'EXO' },
-  { id: '4', name: 'TWICE', color: 'bg-yellow-500', clubName: 'TWICE' },
-  { id: '5', name: 'NCT', color: 'bg-green-500', clubName: 'NCT' },
+  { id: '1', name: 'BTS', color: 'bg-purple-500', memberCount: 1000000 },
+  { id: '2', name: 'BLACKPINK', color: 'bg-pink-500', memberCount: 750000 },
+  { id: '3', name: 'EXO', color: 'bg-blue-500', memberCount: 500000 },
+  { id: '4', name: 'TWICE', color: 'bg-yellow-500', memberCount: 600000 },
+  { id: '5', name: 'NCT', color: 'bg-green-500', memberCount: 400000 },
 ];
 
 export type Notification = {
@@ -256,7 +256,7 @@ export type Notification = {
 };
 
 export const dummyNotifications: Notification[] = [
-  { id: 1, type: 'follow', user: '김철수', userId: 'user2', content: '님이 회원님을 팔로우하기 시작���습니다.', time: '방금 전' },
+  { id: 1, type: 'follow', user: '김철수', userId: 'user2', content: '님이 회원님을 팔로우하기 시작습니다.', time: '방금 전' },
   { id: 2, type: 'like', user: '이영희', userId: 'user3', content: '님이 회원님의 게시물을 좋아합니다.', time: '5분 전', targetPostId: '1' },
   { id: 3, type: 'comment', user: '박지성', userId: 'user4', content: '님이 회원님의 게시물에 댓글을 남겼습니다: "멋진 프로젝트네요!"', time: '30분 전', targetPostId: '1' },
   { id: 4, type: 'repost', user: '최민수', userId: 'user5', content: '님이 회원님의 게시물을 리포스트했습니다.', time: '1시간 전', targetPostId: '1' },
@@ -302,7 +302,7 @@ export const dummyClubNotices: ClubNotice[] = [
     id: '3',
     clubId: '2',
     title: 'BLACKPINK 월드투어 안내',
-    content: '다음 달부터 시작되는 월드투어 일정을 안내드립니다.',
+    content: '다음 달부터 시작되는 월���투어 일정을 안내드립니다.',
     author: { userId: 'user2', name: 'BLACKPINK 매니저', username: 'bp_manager' },
     createdAt: '2023-05-05T09:15:00Z',
   },

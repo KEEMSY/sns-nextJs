@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { FaInstagram, FaCamera, FaPen, FaUserPlus } from 'react-icons/fa'
+import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
+import { BiRepost } from 'react-icons/bi'
 import { motion } from 'framer-motion'
 import Layout from './Layout'
 import ComposeModal from './ComposeModal'
@@ -15,6 +16,7 @@ interface ProfileDetailProps {
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState<TabType>('threads')
+  const [activeThreadView, setActiveThreadView] = useState<'threads' | 'saved' | 'reposts'>('threads')
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userClubs, setUserClubs] = useState<any[]>([])
@@ -27,20 +29,45 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
 
   const isCurrentUser = user?.userId === dummyCurrentUser.userId
 
-  const tabs = ['threads', 'reposts', 'clubs'] as const;
+  const tabs = ['threads', 'clubs'] as const;
   type TabType = typeof tabs[number];
   const tabNames: Record<TabType, string> = {
     threads: '스레드',
-    reposts: '리포스트',
     clubs: '클럽'
   }
 
   const renderContent = () => {
     switch(activeTab) {
       case 'threads':
-        return <div>스레드 내용</div>
-      case 'reposts':
-        return <div>리포스트 내용</div>
+        return (
+          <div>
+            {isCurrentUser && (
+              <div className="flex justify-center mb-6">
+                <div className="inline-flex bg-gray-800 rounded-full p-2">
+                  {['threads', 'saved', 'reposts'].map((view) => (
+                    <motion.button
+                      key={view}
+                      className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                        activeThreadView === view ? 'text-blue-500' : 'text-gray-400'
+                      }`}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setActiveThreadView(view as 'threads' | 'saved' | 'reposts')}
+                      title={view.charAt(0).toUpperCase() + view.slice(1)}
+                    >
+                      {view === 'threads' && <SiThreads size={20} />}
+                      {view === 'saved' && <FaBookmark size={20} />}
+                      {view === 'reposts' && <BiRepost size={20} />}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {activeThreadView === 'threads' && <div>스레드 내용</div>}
+            {activeThreadView === 'saved' && <div>저장된 포스트 내용</div>}
+            {activeThreadView === 'reposts' && <div>리포스트 내용</div>}
+          </div>
+        )
       case 'clubs':
         return (
           <div className="grid grid-cols-2 gap-4">
@@ -107,8 +134,8 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
               className="absolute bottom-0 h-0.5 bg-blue-500"
               initial={false}
               animate={{
-                left: `calc(${tabs.indexOf(activeTab) * 33.33}% + 5%)`,
-                width: '23.33%'
+                left: `calc(${tabs.indexOf(activeTab) * 50}% + 5%)`,
+                width: 'calc(90% / 2)'
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
@@ -143,7 +170,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                 <h3 className="font-bold text-lg">프로필 완성하기</h3>
                 <span className="text-gray-500 text-sm">4개 남음</span>
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#1c1c1c] p-4 rounded-lg flex flex-col items-center text-center">
                   <div className="bg-[#2a2a2a] rounded-full p-3 mb-2">
                     <FaCamera className="text-white" size={24} />
