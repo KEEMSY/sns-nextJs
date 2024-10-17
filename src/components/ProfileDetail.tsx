@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark } from 'react-icons/fa'
+import React, { useState, useEffect, useRef } from 'react'
+import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark, FaThreads, FaUsers } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads } from 'react-icons/si'
+import { FaComments } from 'react-icons/fa'
 import { BiRepost } from 'react-icons/bi'
 import { motion } from 'framer-motion'
 import Layout from './Layout'
@@ -15,11 +16,54 @@ interface ProfileDetailProps {
 }
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
-  const [activeTab, setActiveTab] = useState<TabType>('threads')
+  const [activeTab, setActiveTab] = useState<'threads' | 'clubs'>('threads')
   const [activeThreadView, setActiveThreadView] = useState<'threads' | 'saved' | 'reposts'>('threads')
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userClubs, setUserClubs] = useState<any[]>([])
+
+  const [barWidth, setBarWidth] = useState(0);
+  const [barLeft, setBarLeft] = useState(0);
+  const [threadBarWidth, setThreadBarWidth] = useState(0);
+  const [threadBarLeft, setThreadBarLeft] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const threadViewRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const threadViewContainerRef = useRef<HTMLDivElement>(null);
+
+  const measureTab = () => {
+    const activeTabIndex = tabs.indexOf(activeTab);
+    const activeTabElement = tabRefs.current[activeTabIndex];
+    if (activeTabElement) {
+      const tabRect = activeTabElement.getBoundingClientRect();
+      const parentRect = activeTabElement.offsetParent!.getBoundingClientRect();
+      setBarWidth(tabRect.width * 0.6);
+      setBarLeft(tabRect.left - parentRect.left + (tabRect.width * 0.2));
+    }
+  };
+
+  const measureThreadView = () => {
+    const activeViewIndex = ['threads', 'saved', 'reposts'].indexOf(activeThreadView);
+    const activeViewElement = threadViewRefs.current[activeViewIndex];
+    const container = threadViewContainerRef.current;
+    if (activeViewElement && container) {
+      const viewRect = activeViewElement.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const iconWidth = activeViewElement.querySelector('svg')?.getBoundingClientRect().width || 0;
+      setThreadBarWidth(iconWidth);
+      setThreadBarLeft(viewRect.left - containerRect.left + (viewRect.width - iconWidth) / 2);
+    }
+  };
+
+  useEffect(() => {
+    measureTab();
+    measureThreadView();
+    window.addEventListener('resize', measureTab);
+    window.addEventListener('resize', measureThreadView);
+    return () => {
+      window.removeEventListener('resize', measureTab);
+      window.removeEventListener('resize', measureThreadView);
+    };
+  }, [activeTab, activeThreadView]);
 
   useEffect(() => {
     const foundUser = dummyUsers.find(u => u.userId === userId);
@@ -36,6 +80,11 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
     clubs: '클럽'
   }
 
+  const tabIcons = {
+    threads: FaComments,
+    clubs: FaUsers
+  }
+
   const renderContent = () => {
     switch(activeTab) {
       case 'threads':
@@ -43,11 +92,12 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
           <div>
             {isCurrentUser && (
               <div className="flex justify-center mb-6">
-                <div className="inline-flex bg-gray-800 rounded-full p-2">
-                  {['threads', 'saved', 'reposts'].map((view) => (
+                <div ref={threadViewContainerRef} className="flex justify-between rounded-full p-2 w-full max-w-md relative">
+                  {['threads', 'saved', 'reposts'].map((view, index) => (
                     <motion.button
                       key={view}
-                      className={`p-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                      ref={el => threadViewRefs.current[index] = el}
+                      className={`flex items-center justify-center p-2 rounded-full text-sm font-medium transition-all duration-200 ${
                         activeThreadView === view ? 'text-blue-500' : 'text-gray-400'
                       }`}
                       whileHover={{ scale: 1.1 }}
@@ -57,9 +107,18 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                     >
                       {view === 'threads' && <SiThreads size={20} />}
                       {view === 'saved' && <FaBookmark size={20} />}
-                      {view === 'reposts' && <BiRepost size={20} />}
+                      {view === 'reposts' && <BiRepost size={30} />}
                     </motion.button>
                   ))}
+                  <motion.div
+                    className="absolute bottom-0 h-0.5 bg-blue-500"
+                    initial={false}
+                    animate={{
+                      left: threadBarLeft,
+                      width: threadBarWidth
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
                 </div>
               </div>
             )}
@@ -120,25 +179,37 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
           </button>
         )}
         <div className="flex justify-center mt-3 mb-4 relative w-full">
-          <div className="relative flex w-full max-w-2xl justify-between">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                className={`text-white font-semibold px-4 py-2 flex-1 text-lg ${activeTab === tab ? 'text-blue-500' : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tabNames[tab]}
-              </button>
-            ))}
+          <div className="relative flex w-full max-w-md bg-[#1a1a1a] rounded-full overflow-hidden p-1">
             <motion.div
-              className="absolute bottom-0 h-0.5 bg-blue-500"
+              className="absolute top-1 bottom-1 rounded-full bg-blue-500"
+              layoutId="activeTabBackground"
               initial={false}
               animate={{
-                left: `calc(${tabs.indexOf(activeTab) * 50}% + 5%)`,
-                width: 'calc(90% / 2)'
+                left: activeTab === 'threads' ? '0%' : '50%',
+                right: activeTab === 'threads' ? '50%' : '0%',
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
+            {tabs.map((tab, index) => {
+              const Icon = tabIcons[tab];
+              return (
+                <motion.button
+                  key={tab}
+                  ref={el => tabRefs.current[index] = el}
+                  className={`relative z-10 flex items-center justify-center py-2 px-4 flex-1 transition-all duration-200 ${
+                    activeTab === tab 
+                      ? 'text-white' 
+                      : 'text-gray-400'
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                  whileHover={activeTab !== tab ? { scale: 1.05 } : {}}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Icon size={20} className="mr-2" />
+                  <span className="font-medium">{tabNames[tab]}</span>
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -196,7 +267,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                     <FaUserPlus className="text-white" size={24} />
                   </div>
                   <h4 className="font-semibold mb-1">프로필 5개 팔로우</h4>
-                  <p className="text-gray-500 text-sm mb-3">관심 있는 스레드로 피드를 채워 보세요.</p>
+                  <p className="text-gray-500 text-sm mb-3">심 있는 스레드로 피드를 채워 보세요.</p>
                   <button className="bg-white text-black font-bold py-2 px-4 rounded-full w-full">
                     프로필 보기
                   </button>
