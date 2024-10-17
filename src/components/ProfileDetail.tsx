@@ -202,7 +202,8 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                       : 'text-gray-400'
                   }`}
                   onClick={() => setActiveTab(tab)}
-                  whileHover={activeTab !== tab ? { scale: 1.05 } : {}}
+                  whileHover={{ scale: 1.05 }}
+                  animate={{ scale: activeTab === tab ? 1.05 : 1 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <Icon size={20} className="mr-2" />
