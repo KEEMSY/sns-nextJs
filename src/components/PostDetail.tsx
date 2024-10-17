@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { FaHeart, FaComment, FaRetweet, FaBookmark, FaRegComment, FaRegHeart, FaRegBookmark } from 'react-icons/fa'
-import { dummyPosts, dummyComments } from '../lib/dummyData'
 import { BsThreeDots } from 'react-icons/bs'
 import Layout from './Layout'
+import { dummyPosts, dummyComments } from '../lib/dummyData'
 
 interface Post {
   id: string;
@@ -50,8 +50,13 @@ export default function PostDetail({ postId }: { postId: string }) {
       setPost(foundPost)
     }
 
-    const filteredComments = dummyComments.filter(c => c.postId === postId)
-    setComments(filteredComments)
+    if (Array.isArray(dummyComments)) {
+      const filteredComments = dummyComments.filter(c => c.postId === postId)
+      setComments(filteredComments)
+    } else {
+      console.error('dummyComments is not an array:', dummyComments)
+      setComments([])
+    }
   }, [postId])
 
   if (!post) return <div className="flex justify-center items-center h-full">Loading...</div>
