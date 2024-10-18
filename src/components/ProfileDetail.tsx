@@ -156,20 +156,25 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
       showBackButton={true}
     >
       <div className="bg-[#101010] z-10 p-4 border-b border-gray-800">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <p className="text-lg">{user.bio}</p>
-            <h2 className="text-2xl font-bold">{user.name}</h2>
-            <p className="text-gray-500">@{user.username}</p>
-            <p className="text-gray-500 mt-2">팔로워 {user.followers}명</p>
+        <div className="flex items-start mb-6">
+          <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center mr-7">
+            <IoMdPerson size={48} />
           </div>
-          <div className="flex flex-col items-end">
-            <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mb-2">
-              <IoMdPerson size={32} />
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold mb-1">{user.name}</h2>
+            <p className="text-gray-500 mb-2">@{user.username}</p>
+            <p className="text-lg mb-3">{user.bio}</p>
+            <div className="flex items-center space-x-4 mb-3">
+              <p className="text-gray-400"><span className="font-semibold text-white">{user.followers}</span> 팔로워</p>
+              <p className="text-gray-400"><span className="font-semibold text-white">{user.following}</span> 팔로잉</p>
             </div>
-            <div className="flex space-x-2">
-              <FaInstagram size={24} />
-              <SiThreads size={24} />
+            <div className="flex space-x-3">
+              <a href={user.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                <FaInstagram size={20} />
+              </a>
+              <a href={user.threadsUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                <SiThreads size={20} />
+              </a>
             </div>
           </div>
         </div>
