@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark, FaThreads, FaUsers } from 'react-icons/fa'
+import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark, FaThreads, FaUsers, FaPhone, FaEnvelope } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
-import { SiThreads } from 'react-icons/si'
+import { SiThreads, SiKakaotalk } from 'react-icons/si'
 import { FaComments } from 'react-icons/fa'
 import { BiRepost } from 'react-icons/bi'
 import { motion } from 'framer-motion'
@@ -156,66 +156,66 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
       showBackButton={true}
     >
       <div className="bg-[#101010] z-10 p-4 border-b border-gray-800">
-        <div className="flex items-start mb-6">
-          <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center mr-7">
-            <IoMdPerson size={48} />
-          </div>
-          <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-1">{user.name}</h2>
-            <p className="text-gray-500 mb-2">@{user.username}</p>
-            <p className="text-lg mb-3">{user.bio}</p>
-            <div className="flex items-center space-x-4 mb-3">
-              <p className="text-gray-400"><span className="font-semibold text-white">{user.followers}</span> 팔로워</p>
-              <p className="text-gray-400"><span className="font-semibold text-white">{user.following}</span> 팔로잉</p>
+        <div className="bg-[#101010] p-6 rounded-lg shadow-lg mb-4">
+          <div className="flex flex-col items-center mb-6">
+            <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4 border-4 border-gray-700">
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
+              ) : (
+                <IoMdPerson size={64} className="text-gray-300" />
+              )}
             </div>
-            <div className="flex space-x-3">
-              <a href={user.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <FaInstagram size={20} />
-              </a>
-              <a href={user.threadsUrl} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                <SiThreads size={20} />
-              </a>
+            <h2 className="text-3xl font-bold mb-1">{user.name}</h2>
+            <p className="text-gray-400 text-lg mb-2">@{user.username}</p>
+            
+            <div className="flex items-center space-x-6 mb-4">
+              <p className="text-gray-300"><span className="font-semibold text-white text-lg">{user.followers}</span> 팔로워</p>
+              <p className="text-gray-300"><span className="font-semibold text-white text-lg">{user.following}</span> 팔로잉</p>
             </div>
-          </div>
-        </div>
-        {isCurrentUser && (
-          <button className="bg-[#1a1a1a] text-white font-bold py-2 px-4 rounded-full w-full mb-4">
-            프로필 수정
-          </button>
-        )}
-        <div className="flex justify-center mt-3 mb-4 relative w-full">
-          <div className="relative flex w-full max-w-md bg-[#1a1a1a] rounded-full overflow-hidden p-1">
-            <motion.div
-              className="absolute top-1 bottom-1 rounded-full bg-blue-500"
-              layoutId="activeTabBackground"
-              initial={false}
-              animate={{
-                left: activeTab === 'threads' ? '0%' : '50%',
-                right: activeTab === 'threads' ? '50%' : '0%',
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
-            {tabs.map((tab, index) => {
-              const Icon = tabIcons[tab];
-              return (
-                <motion.button
-                  key={tab}
-                  ref={el => tabRefs.current[index] = el}
-                  className={`relative z-10 flex items-center justify-center py-2 px-4 flex-1 transition-all duration-200 ${
-                    activeTab === tab 
-                      ? 'text-white' 
-                      : 'text-gray-400'
-                  }`}
-                  onClick={() => setActiveTab(tab)}
-                  whileHover={{ scale: 1.05 }}
-                  animate={{ scale: activeTab === tab ? 1.05 : 1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Icon size={20} className="mr-2" />
-                  <span className="font-medium">{tabNames[tab]}</span>
-                </motion.button>
-              );
-            })}
+            
+            <div className="flex flex-wrap justify-center gap-6 mb-4">
+              {user.instagramUrl && (
+                <a href={user.instagramUrl} target="_blank" rel="noopener noreferrer" 
+                   className="text-gray-400 hover:text-pink-500 transition-colors">
+                  <FaInstagram size={20} />
+                </a>
+              )}
+              {user.threadsUrl && (
+                <a href={user.threadsUrl} target="_blank" rel="noopener noreferrer" 
+                   className="text-gray-400 hover:text-white transition-colors">
+                  <SiThreads size={20} />
+                </a>
+              )}
+              {user.email && (
+                <a href={`mailto:${user.email}`} 
+                   className="text-gray-400 hover:text-red-500 transition-colors">
+                  <FaEnvelope size={20} />
+                </a>
+              )}
+              {user.phone && (
+                <a href={`tel:${user.phone}`} 
+                   className="text-gray-400 hover:text-green-500 transition-colors">
+                  <FaPhone size={20} />
+                </a>
+              )}
+              {user.kakaoId && (
+                <a href={`https://open.kakao.com/o/${user.kakaoId}`} target="_blank" rel="noopener noreferrer" 
+                   className="text-gray-400 hover:text-yellow-400 transition-colors">
+                  <SiKakaotalk size={20} />
+                </a>
+              )}
+            </div>
+
+            {user.bio && (
+              <p className="text-gray-200 text-lg mt-4 mb-4 text-center leading-relaxed">{user.bio}</p>
+            )}
+
+
+            {isCurrentUser && (
+              <button className="bg-[#1a1a1a] text-white hover:text-green-500 font-bold py-2 px-4 rounded-full w-full max-w-xs">
+                프로필 수정
+              </button>
+            )}
           </div>
         </div>
       </div>
