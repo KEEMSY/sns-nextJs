@@ -9,7 +9,13 @@ export const dummyCurrentUser = {
   website: 'keemsy.com',
   joinDate: '2020년 3월 가입',
   color: 'bg-blue-500',
-  avatar: 'https://via.placeholder.com/40',
+  avatar: `https://ui-avatars.com/api/?name=KEEMSY&background=random&color=fff&size=150`,
+  email: 'keemsy@example.com',
+  phone: '+82-10-1234-5678',
+  instagramUrl: 'https://instagram.com/keemsy',
+  threadsUrl: 'https://threads.net/keemsy',
+  kakaoId: 'keemsy_kakao',
+  whatsapp: '+821012345678',
 };
 
 const baseData = [
@@ -19,15 +25,33 @@ const baseData = [
   },
   {
     content: '맛있는 점심 먹고 왔습니다. 오늘 점심 메뉴는 비빔밥! 🍲 #맛집 #점심스타그램',
-    author: { userId: 'user2', name: '김철수', username: 'chulsoo_kim', color: 'bg-green-500' },
+    author: { 
+      userId: 'user2', 
+      name: '김철수', 
+      username: 'chulsoo_kim', 
+      color: 'bg-green-500',
+      avatar: `https://ui-avatars.com/api/?name=김철수&background=random&color=fff&size=150`,
+      bio: '음식 블로거 | 맛집 탐방가',
+      followers: 5000,
+      following: 500,
+      instagramUrl: 'https://instagram.com/chulsoo_food',
+      email: 'chulsoo@example.com',
+    },
   },
   {
     content: '새 앨범 작업 중입니다. 기대해주세요! 🎵 #음악 #신보',
-    author: { userId: 'user3', name: '이영희', username: 'younghee_lee', color: 'bg-purple-500' },
-  },
-  {
-    content: '오늘 날씨가 정말 좋네요. 산책하기 딱 좋은 날이에요. ☀️ #날씨 #산책',
-    author: { userId: 'user4', name: '박지성', username: 'jisung_park', color: 'bg-yellow-500' },
+    author: { 
+      userId: 'user3', 
+      name: '이영희', 
+      username: 'younghee_lee', 
+      color: 'bg-purple-500',
+      avatar: `https://ui-avatars.com/api/?name=이영희&background=random&color=fff&size=150`,
+      bio: '싱어송라이터 | 음악 제작자',
+      followers: 10000,
+      following: 1000,
+      instagramUrl: 'https://instagram.com/younghee_music',
+      threadsUrl: 'https://threads.net/younghee_music',
+    },
   },
   {
     content: '새로운 책을 읽기 시작했어요. 추천받은 책인데 정말 재미있네요! 📚 #독서 #책추천',
@@ -225,13 +249,26 @@ export const dummyComments: Comment[] = [
 
 export const dummyUsers = [
   dummyCurrentUser,
-  ...baseData.slice(1).map(item => item.author),
+  ...baseData.slice(1).map(item => ({
+    ...item.author,
+    bio: item.author.bio || '사용자 소개가 없습니다.',
+    followers: item.author.followers || Math.floor(Math.random() * 10000),
+    following: item.author.following || Math.floor(Math.random() * 1000),
+    avatar: item.author.avatar || `https://ui-avatars.com/api/?name=${item.author.name}&background=random&color=fff&size=150`,
+    email: item.author.email || `${item.author.username}@example.com`,
+    instagramUrl: item.author.instagramUrl || `https://instagram.com/${item.author.username}`,
+    threadsUrl: item.author.threadsUrl || `https://threads.net/${item.author.username}`,
+  })),
   ...dummyComments.map(comment => ({
     userId: comment.author.userId,
     name: comment.author.name,
     username: comment.author.username,
     color: 'bg-gray-500',
-    avatar: comment.author.avatar,
+    avatar: comment.author.avatar || `https://ui-avatars.com/api/?name=${comment.author.name}&background=random&color=fff&size=150`,
+    bio: '댓글 작성자',
+    followers: Math.floor(Math.random() * 5000),
+    following: Math.floor(Math.random() * 500),
+    email: `${comment.author.username}@example.com`,
   }))
 ].filter((user, index, self) => 
   index === self.findIndex((t) => t.userId === user.userId)
@@ -302,7 +339,7 @@ export const dummyClubNotices: ClubNotice[] = [
     id: '3',
     clubId: '2',
     title: 'BLACKPINK 월드투어 안내',
-    content: '다음 달부터 시작되는 월���투어 일정을 안내드립니다.',
+    content: '다음 달부터 시작되는 월투어 일정을 안내드립니다.',
     author: { userId: 'user2', name: 'BLACKPINK 매니저', username: 'bp_manager' },
     createdAt: '2023-05-05T09:15:00Z',
   },
