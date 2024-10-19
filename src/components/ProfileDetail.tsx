@@ -102,6 +102,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                       }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
+                      animate={{ scale: activeThreadView === view ? 1.1 : 1 }}
                       onClick={() => setActiveThreadView(view as 'threads' | 'saved' | 'reposts')}
                       title={view.charAt(0).toUpperCase() + view.slice(1)}
                     >
