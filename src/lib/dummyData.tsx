@@ -4,7 +4,7 @@ export const dummyCurrentUser = {
   username: 'keemsy',
   bio: '🇰🇷 웹 개발자 | 커피 애호가',
   followers: 7777,
-  following: 777,
+  following: 3,
   location: '서울, 대한민국',
   website: 'keemsy.com',
   joinDate: '2020년 3월 가입',
@@ -16,6 +16,9 @@ export const dummyCurrentUser = {
   threadsUrl: 'https://threads.net/keemsy',
   kakaoId: 'keemsy_kakao',
   whatsapp: '+821012345678',
+  threads: [], // 빈 배열로 초기화
+  savedPosts: [], // 빈 배열로 초기화
+  reposts: [], // 빈 배열로 초기화
 };
 
 const baseData = [
@@ -258,6 +261,9 @@ export const dummyUsers = [
     email: item.author.email || `${item.author.username}@example.com`,
     instagramUrl: item.author.instagramUrl || `https://instagram.com/${item.author.username}`,
     threadsUrl: item.author.threadsUrl || `https://threads.net/${item.author.username}`,
+    threads: [], // 빈 배열로 초기화
+    savedPosts: [], // 빈 배열로 초기화
+    reposts: [], // 빈 배열로 초기화
   })),
   ...dummyComments.map(comment => ({
     userId: comment.author.userId,
@@ -269,6 +275,9 @@ export const dummyUsers = [
     followers: Math.floor(Math.random() * 5000),
     following: Math.floor(Math.random() * 500),
     email: `${comment.author.username}@example.com`,
+    threads: [], // 빈 배열로 초기화
+    savedPosts: [], // 빈 배열로 초기화
+    reposts: [], // 빈 배열로 초기화
   }))
 ].filter((user, index, self) => 
   index === self.findIndex((t) => t.userId === user.userId)
@@ -418,3 +427,4 @@ export const dummyMarketItems: MarketItem[] = [
   },
   // ... 더 많은 아이템 추가
 ];
+
