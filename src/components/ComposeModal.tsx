@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { FaImage, FaGift, FaPoll, FaSmile } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image';
 
 interface ComposeModalProps {
   isOpen: boolean
@@ -60,9 +61,11 @@ export default function ComposeModal({ isOpen, onClose }: ComposeModalProps) {
           >
             <div className="p-4">
               <div className="flex items-start space-x-4">
-                <img
+                <Image
                   src="https://via.placeholder.com/48"
                   alt="User Avatar"
+                  width={48}
+                  height={48}
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="flex-grow">

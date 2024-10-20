@@ -26,17 +26,12 @@ export default function ProfilePage() {
     }
   }, [isLoggedIn]);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setIsModalOpen(false);
-  };
 
   if (!isLoggedIn) {
     return (
       <SignUpModal
         isOpen={isModalOpen}
         onClose={() => router.push('/')}
-        onLogin={handleLogin}
       />
     );
   }

@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 해야할 일
+
+- [ ] 2024.10.20 컨테이너와 개발 환경이 동일하게 설정하기
+
 ## Getting Started
 
 First, run the development server:

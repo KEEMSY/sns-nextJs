@@ -4,12 +4,10 @@ import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { FaHome, FaSearch, FaHeart, FaUser, FaFeatherAlt, FaUsers, FaSignOutAlt } from 'react-icons/fa'
 import ComposeModal from './ComposeModal'
-import SignUpModal from './SignUpModal'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Sidebar() {
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false)
   const composeButtonRef = useRef<HTMLButtonElement>(null)
   const { isLoggedIn, user, logout } = useAuth()
 
@@ -17,13 +15,8 @@ export default function Sidebar() {
     setIsComposeModalOpen(true)
   }
 
-  const handleSignUpClick = () => {
-    setIsSignUpModalOpen(true)
-  }
-
   const handleCloseModal = () => {
     setIsComposeModalOpen(false)
-    setIsSignUpModalOpen(false)
     if (composeButtonRef.current) {
       composeButtonRef.current.blur()
     }
@@ -58,10 +51,6 @@ export default function Sidebar() {
       </aside>
       <ComposeModal
         isOpen={isComposeModalOpen}
-        onClose={handleCloseModal}
-      />
-      <SignUpModal
-        isOpen={isSignUpModalOpen}
         onClose={handleCloseModal}
       />
     </>

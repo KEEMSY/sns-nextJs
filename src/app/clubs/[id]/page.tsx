@@ -35,10 +35,12 @@ const ClubDetail = () => {
   const [activeTab, setActiveTab] = useState('community');
 
   useEffect(() => {
-    const id = params.id as string;
-    const foundClub = dummyClubs.find(c => c.id === id);
-    if (foundClub) {
-      setClub(foundClub);
+    if (params) {
+      const id = params.id as string;
+      const foundClub = dummyClubs.find(c => c.id === id);
+      if (foundClub) {
+        setClub(foundClub);
+      }
     }
   }, [params]);
 

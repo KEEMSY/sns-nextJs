@@ -13,8 +13,8 @@ interface User {
 interface Club {
   id: string;
   name: string;
-  clubName: string;
   color: string;
+  memberCount: number;
 }
 
 interface RecommendationsProps {

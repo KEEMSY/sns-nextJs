@@ -6,6 +6,7 @@ import { FaHeart, FaComment, FaRetweet, FaBookmark, FaRegComment, FaRegHeart, Fa
 import { BsThreeDots } from 'react-icons/bs'
 import Layout from './Layout'
 import { dummyPosts, dummyComments } from '../lib/dummyData'
+import Image from 'next/image';
 
 interface Post {
   id: string;
@@ -114,7 +115,7 @@ export default function PostDetail({ postId }: { postId: string }) {
         {comments.map((comment) => (
           <div key={comment.id} className="mb-4 pb-4 border-b border-gray-800">
             <div className="flex items-start">
-              <img src={comment.author.avatar} alt={comment.author.name} className="w-10 h-10 rounded-full mr-3" />
+              <Image src={comment.author.avatar} alt={comment.author.name} width={48} height={48} className="w-10 h-10 rounded-full mr-3" />
               <div className="flex-1">
                 <div className="flex justify-between items-center mb-1">
                   <h3 className="font-bold">{comment.author.name}</h3>

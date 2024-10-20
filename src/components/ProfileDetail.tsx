@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react'
-import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark, FaThreads, FaUsers, FaPhone, FaEnvelope } from 'react-icons/fa'
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react'
+import { FaInstagram, FaCamera, FaPen, FaUserPlus, FaBookmark, FaUsers, FaPhone, FaEnvelope } from 'react-icons/fa'
 import { IoMdPerson } from 'react-icons/io'
 import { SiThreads, SiKakaotalk } from 'react-icons/si'
 import { FaComments } from 'react-icons/fa'
@@ -10,23 +10,66 @@ import { motion } from 'framer-motion'
 import Layout from './Layout'
 import ComposeModal from './ComposeModal'
 import { dummyClubs, dummyCurrentUser, dummyUsers } from '../lib/dummyData'
-
+import Image from 'next/image';
 interface ProfileDetailProps {
   userId: string;
 }
+
+interface User {
+  userId: string;
+  name: string;
+  username: string;
+  avatar: string;
+  bio?: string;
+  followers: number;
+  following: number;
+  instagramUrl?: string;
+  threadsUrl?: string;
+  email?: string;
+  phone?: string;
+  kakaoId?: string;
+  threads?: Thread[]; // Thread 인터페이스 정의 필요(임시 처리)
+  savedPosts?: Post[]; // Post 인터페이스 정의 필요(임시 처리)
+  reposts?: Repost[]; // Repost 인터페이스 정의 필요(임시 처리) 
+}
+
+interface Club {
+  id: string;
+  name: string;
+  color: string;
+  memberCount: number;
+}
+
+// 임시 처리
+interface Thread {
+  id: string;
+  content: string;
+  // 기타 필요한 속성들...
+}
+
+interface Post {
+  id: string;
+  content: string;
+  // 기타 필요한 속성들...
+}
+
+interface Repost {
+  id: string;
+  originalPost: Post;
+  // 기타 필요한 속성들...
+}
+
+// 임시 처리 끝
 
 const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState<'threads' | 'clubs'>('threads')
   const [activeThreadView, setActiveThreadView] = useState<'threads' | 'saved' | 'reposts'>('threads')
   const [isComposeModalOpen, setIsComposeModalOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const [userClubs, setUserClubs] = useState<any[]>([])
+  const [user, setUser] = useState<User | null>(null)
+  const [userClubs, setUserClubs] = useState<Club[]>([])
 
-  const [barWidth, setBarWidth] = useState(0);
-  const [barLeft, setBarLeft] = useState(0);
   const [threadBarWidth, setThreadBarWidth] = useState(0);
   const [threadBarLeft, setThreadBarLeft] = useState(0);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const threadViewRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const threadViewContainerRef = useRef<HTMLDivElement>(null);
   const scrollPosition = useRef(0);
@@ -35,18 +78,8 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
   const threadContentRef = useRef<HTMLDivElement>(null);
   const clubContentRef = useRef<HTMLDivElement>(null);
 
-  const measureTab = () => {
-    const activeTabIndex = tabs.indexOf(activeTab);
-    const activeTabElement = tabRefs.current[activeTabIndex];
-    if (activeTabElement) {
-      const tabRect = activeTabElement.getBoundingClientRect();
-      const parentRect = activeTabElement.offsetParent!.getBoundingClientRect();
-      setBarWidth(tabRect.width * 0.6);
-      setBarLeft(tabRect.left - parentRect.left + (tabRect.width * 0.2));
-    }
-  };
 
-  const measureThreadView = () => {
+  const measureThreadView = useCallback(() => {
     const activeViewIndex = ['threads', 'saved', 'reposts'].indexOf(activeThreadView);
     const activeViewElement = threadViewRefs.current[activeViewIndex];
     const container = threadViewContainerRef.current;
@@ -57,18 +90,15 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
       setThreadBarWidth(iconWidth);
       setThreadBarLeft(viewRect.left - containerRect.left + (viewRect.width - iconWidth) / 2);
     }
-  };
+  }, [activeThreadView]);
 
   useEffect(() => {
-    measureTab();
     measureThreadView();
-    window.addEventListener('resize', measureTab);
     window.addEventListener('resize', measureThreadView);
     return () => {
-      window.removeEventListener('resize', measureTab);
       window.removeEventListener('resize', measureThreadView);
     };
-  }, [activeTab, activeThreadView]);
+  }, [activeTab, activeThreadView, measureThreadView]);
 
   useEffect(() => {
     const foundUser = dummyUsers.find(u => u.userId === userId);
@@ -162,7 +192,9 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                     {['threads', 'saved', 'reposts'].map((view, index) => (
                       <motion.button
                         key={view}
-                        ref={el => threadViewRefs.current[index] = el}
+                        ref={(el: HTMLButtonElement | null) => {
+                          if (el) threadViewRefs.current[index] = el;
+                        }}
                         className={`flex items-center justify-center p-2 rounded-full text-sm font-medium transition-all duration-200 ${
                           activeThreadView === view ? 'text-blue-500' : 'text-gray-400'
                         }`}
@@ -192,7 +224,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             )}
             {activeThreadView === 'threads' && (
               <div>
-                {user.threads && user.threads.length > 0 ? (
+                {user?.threads && user.threads.length > 0 ? (
                   <div>스레드 내용</div>
                 ) : (
                   <div className="text-center text-gray-500 py-8">
@@ -203,7 +235,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             )}
             {activeThreadView === 'saved' && (
               <div>
-                {user.savedPosts && user.savedPosts.length > 0 ? (
+                {user?.savedPosts && user.savedPosts.length > 0 ? (
                   <div>저장된 포스트 내용</div>
                 ) : (
                   <div className="text-center text-gray-500 py-8">
@@ -215,7 +247,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
             )}
             {activeThreadView === 'reposts' && (
               <div>
-                {user.reposts && user.reposts.length > 0 ? (
+                {user?.reposts && user.reposts.length > 0 ? (
                   <div>리포스트 내용</div>
                 ) : (
                   <div className="text-center text-gray-500 py-8">
@@ -264,12 +296,15 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
       <div className="bg-[#101010] z-10 p-4 border-b border-gray-800">
         <div className="bg-[#101010] p-6 rounded-lg shadow-lg">
           <div className="flex flex-col items-center">
-            <div className="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center mb-4 border-4 border-gray-700">
-              {user.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-              ) : (
-                <IoMdPerson size={64} className="text-gray-300" />
-              )}
+            <div className="w-32 h-32 bg-gray-700 rounded-full overflow-hidden mb-4 border-4 border-gray-700">
+              <Image 
+                src={user.avatar} 
+                alt={user.name} 
+                width={128} 
+                height={128} 
+                className="object-cover"
+                unoptimized={user.avatar.startsWith('https://ui-avatars.com')}
+              />
             </div>
             <h2 className="text-3xl font-bold mb-1">{user.name}</h2>
             <p className="text-gray-400 text-lg mb-2">@{user.username}</p>
