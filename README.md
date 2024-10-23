@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## 해야할 일
 
-- [ ] 2024.10.20 컨테이너와 개발 환경이 동일하게 설정하기
+- [x] 2024.10.20 컨테이너와 개발 환경이 동일하게 설정하기
 - [ ] 2024.10.20 사용하는 데이터의 타입을 한 곳에 모아두기
 
 ## Getting Started
