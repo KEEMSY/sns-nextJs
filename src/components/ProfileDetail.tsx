@@ -11,6 +11,8 @@ import Layout from './Layout'
 import ComposeModal from './ComposeModal'
 import { dummyClubs, dummyCurrentUser, dummyUsers } from '../lib/dummyData'
 import Image from 'next/image';
+import ProfileSidebar from './sidebars/ProfileSidebar';
+
 interface ProfileDetailProps {
   userId: string;
 }
@@ -292,29 +294,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
     <Layout
       title="프로필"
       showBackButton={true}
-      rightSidebar={
-        <div className="p-4">
-          <h2 className="text-xl font-bold mb-4">추천 유저</h2>
-          {/* 추천 유저 목록 */}
-          {dummyUsers.slice(0, 5).map(user => (
-            <div key={user.userId} className="flex items-center gap-3 mb-3 p-2 hover:bg-gray-800 rounded-lg cursor-pointer">
-              <div className="w-10 h-10 overflow-hidden rounded-full">
-                <Image
-                  src={user.avatar}
-                  alt={user.name}
-                  width={40}
-                  height={40}
-                  className="object-cover"
-                />
-              </div>
-              <div>
-                <p className="font-medium">{user.name}</p>
-                <p className="text-sm text-gray-400">@{user.username}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      }
+      rightSidebar={<ProfileSidebar />}
     >
       <div className="bg-[#101010] z-10 p-4 border-b border-gray-800">
         <div className="bg-[#101010] p-6 rounded-lg shadow-lg">
