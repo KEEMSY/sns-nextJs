@@ -12,6 +12,7 @@ import ComposeModal from './ComposeModal'
 import { dummyClubs, dummyCurrentUser, dummyUsers } from '../lib/dummyData'
 import Image from 'next/image';
 import ProfileSidebar from './sidebars/ProfileSidebar';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 interface ProfileDetailProps {
   userId: string;
@@ -33,6 +34,7 @@ interface User {
   threads?: Thread[]; // Thread 인터페이스 정의 필요(임시 처리)
   savedPosts?: Post[]; // Post 인터페이스 정의 필요(임시 처리)
   reposts?: Repost[]; // Repost 인터페이스 정의 필요(임시 처리) 
+  isVerified?: boolean; // 인증 여부를 나타내는 속성 추가
 }
 
 interface Club {
@@ -309,7 +311,22 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ userId }) => {
                 unoptimized={user.avatar.startsWith('https://ui-avatars.com')}
               />
             </div>
-            <h2 className="text-3xl font-bold mb-1">{user.name}</h2>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              {user.isVerified && (
+                <div className="relative -ml-[30px] group mb-2">
+                  <BsCheckCircleFill 
+                    className="text-blue-500 drop-shadow-[0_2px_4px_rgba(59,130,246,0.4)] transition-transform duration-200 group-hover:scale-110" 
+                    size={22} 
+                    title="인증된 계정"
+                  />
+                  {/* Tooltip */}
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    인증된 계정
+                  </div>
+                </div>
+              )}
+              <h2 className="text-3xl font-bold" style={{marginBottom: '0px'}}>{user.name}</h2>
+            </div>
             <p className="text-gray-400 text-lg mb-2">@{user.username}</p>
             
             <div className="flex items-center space-x-6 mb-4">

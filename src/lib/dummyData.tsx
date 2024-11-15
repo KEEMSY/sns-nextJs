@@ -19,6 +19,7 @@ export const dummyCurrentUser = {
   threads: [], // 빈 배열로 초기화
   savedPosts: [], // 빈 배열로 초기화
   reposts: [], // 빈 배열로 초기화
+  isVerified: true, // 인증 여부를 나타내는 속성 추가
 };
 
 const baseData = [
@@ -261,9 +262,11 @@ export const dummyUsers = [
     email: item.author.email || `${item.author.username}@example.com`,
     instagramUrl: item.author.instagramUrl || `https://instagram.com/${item.author.username}`,
     threadsUrl: item.author.threadsUrl || `https://threads.net/${item.author.username}`,
-    threads: [], // 빈 배열로 초기화
-    savedPosts: [], // 빈 배열로 초기화
-    reposts: [], // 빈 배열로 초기화
+    threads: [],
+    savedPosts: [],
+    reposts: [],
+    // 특정 유명인들만 인증 마크 표시
+    isVerified: ['sonny', 'yuna_kim', 'hyunjin_ryu', 'tae_hwan_park', 'yeon_koung_kim'].includes(item.author.username),
   })),
   ...dummyComments.map(comment => ({
     userId: comment.author.userId,
@@ -275,9 +278,10 @@ export const dummyUsers = [
     followers: Math.floor(Math.random() * 5000),
     following: Math.floor(Math.random() * 500),
     email: `${comment.author.username}@example.com`,
-    threads: [], // 빈 배열로 초기화
-    savedPosts: [], // 빈 배열로 초기화
-    reposts: [], // 빈 배열로 초기화
+    threads: [],
+    savedPosts: [],
+    reposts: [],
+    isVerified: false, // 댓글 작성자들은 기본적으로 미인증 상태
   }))
 ].filter((user, index, self) => 
   index === self.findIndex((t) => t.userId === user.userId)
