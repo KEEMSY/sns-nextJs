@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { FaHeart, FaComment, FaRetweet, FaBookmark, FaRegComment, FaRegHeart, FaRegBookmark } from 'react-icons/fa'
-import { BsThreeDots } from 'react-icons/bs'
+import { BsThreeDots, BsCheckCircleFill } from 'react-icons/bs'
 import Layout from './Layout'
 import { dummyPosts, dummyComments } from '../lib/dummyData'
 import Image from 'next/image';
@@ -15,6 +15,7 @@ interface Post {
     name: string;
     username: string;
     color: string;
+    isVerified: boolean;
   };
   content: string;
   createdAt: string;
@@ -31,6 +32,7 @@ interface Comment {
     name: string;
     username: string;
     avatar: string;
+    isVerified: boolean;
   };
   content: string;
   createdAt: string;
@@ -76,7 +78,18 @@ export default function PostDetail({ postId }: { postId: string }) {
           <Link href={`/profile/${post.author.userId}`} className="flex items-start">
             <div className={`w-12 h-12 rounded-full mr-4 ${post.author.color}`}></div>
             <div>
-              <h2 className="font-bold text-white hover:underline">{post.author.name}</h2>
+              <div className="flex items-center gap-1">
+                <h2 className="font-bold text-white hover:underline mb-0 leading-none">{post.author.name}</h2>
+                {post.author.isVerified && (
+                  <div className="flex items-center justify-center">
+                    <BsCheckCircleFill 
+                      className="text-blue-500 drop-shadow-[0_2px_4px_rgba(59,130,246,0.4)]" 
+                      size={16} 
+                      title="인증된 계정"
+                    />
+                  </div>
+                )}
+              </div>
               <p className="text-gray-500">@{post.author.username}</p>
             </div>
           </Link>
@@ -118,7 +131,18 @@ export default function PostDetail({ postId }: { postId: string }) {
               <Image src={comment.author.avatar} alt={comment.author.name} width={48} height={48} className="w-10 h-10 rounded-full mr-3" />
               <div className="flex-1">
                 <div className="flex justify-between items-center mb-1">
-                  <h3 className="font-bold">{comment.author.name}</h3>
+                  <div className="flex items-center gap-1">
+                    <h3 className="font-bold hover:underline cursor-pointer leading-none pt-[2px] mb-0">{comment.author.name}</h3>
+                    {comment.author.isVerified && (
+                      <div className="relative group flex items-center">
+                        <BsCheckCircleFill 
+                          className="text-blue-500 drop-shadow-[0_2px_4px_rgba(59,130,246,0.4)]" 
+                          size={14} 
+                          title="인증된 계정"
+                        />
+                      </div>
+                    )}
+                  </div>
                   <div className="flex items-center">
                     <span className="text-gray-500 text-sm mr-2">{comment.createdAt}</span>
                     <BsThreeDots size={16} />

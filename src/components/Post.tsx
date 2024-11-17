@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FaComment, FaHeart, FaRetweet, FaBookmark } from 'react-icons/fa';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 interface PostProps {
   post: {
@@ -9,6 +10,7 @@ interface PostProps {
       name: string;
       username: string;
       color: string;
+      isVerified: boolean;
     };
     content: string;
     createdAt: string;
@@ -33,7 +35,16 @@ const Post: React.FC<PostProps> = ({ post }) => {
             <Link href={`/profile/${post.author.userId}`}>
               <h3 className="font-bold text-white hover:underline mr-2">{post.author.name}</h3>
             </Link>
-            <p className="text-gray-500 text-sm">@{post.author.username}</p>
+            {post.author.isVerified && (
+              <div className="mr-2 flex items-center gap-1">
+                <p className="text-gray-500 text-sm">@{post.author.username}</p>
+                <BsCheckCircleFill 
+                  className="text-blue-500 drop-shadow-[0_2px_4px_rgba(59,130,246,0.4)]" 
+                  size={16} 
+                  title="인증된 계정"
+                />
+              </div>
+            )}
           </div>
           <p className="text-gray-500 text-sm mt-1">{post.createdAtFormatted}</p>
         </div>
