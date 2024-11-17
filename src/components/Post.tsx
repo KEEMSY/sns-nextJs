@@ -24,20 +24,21 @@ interface PostProps {
 const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <div className="border-b border-gray-800 p-4">
-      <div className="flex items-start mb-2">
+      <div className="flex items-center mb-2">
         <Link href={`/profile/${post.author.userId}`}>
           <div className={`w-10 h-10 ${post.author.color} rounded-full flex items-center justify-center text-white font-bold mr-3`}>
             {post.author.name[0]}
           </div>
         </Link>
         <div className="flex-grow">
-          <div className="flex items-center">
-            <Link href={`/profile/${post.author.userId}`}>
-              <h3 className="font-bold text-white hover:underline mr-2">{post.author.name}</h3>
+          <div className="flex items-center gap-2">
+            <Link href={`/profile/${post.author.userId}`} className="d-flex items-center">
+              <span className="font-bold text-white hover:underline text-base leading-[1] inline-block">
+                {post.author.name}
+              </span>
             </Link>
             {post.author.isVerified && (
-              <div className="mr-2 flex items-center gap-1">
-                <p className="text-gray-500 text-sm">@{post.author.username}</p>
+              <div className="flex items-center justify-center">
                 <BsCheckCircleFill 
                   className="text-blue-500 drop-shadow-[0_2px_4px_rgba(59,130,246,0.4)]" 
                   size={16} 
@@ -46,7 +47,10 @@ const Post: React.FC<PostProps> = ({ post }) => {
               </div>
             )}
           </div>
-          <p className="text-gray-500 text-sm mt-1">{post.createdAtFormatted}</p>
+          <div className="flex items-center gap-1">
+            <p className="text-gray-500 text-sm flex items-center leading-[1] m-0">@{post.author.username}</p>
+            <p className="text-gray-500 text-sm mt-1">{post.createdAtFormatted}</p>
+          </div>
         </div>
       </div>
       <p className="text-white mb-4">{post.content}</p>
